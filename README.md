@@ -2,7 +2,7 @@
 
 My new Flutter project.
 
-## Previes Prototype
+## Preview Prototype
 
 <img src="Design/XD/custom – 1.png" width="150">
 <img src="Design/XD/custom – 2.png" width="150">
