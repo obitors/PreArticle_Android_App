@@ -13,7 +13,7 @@ class PreArticle extends StatelessWidget {
       title: 'PreArticle Application',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xff054587),
+        primaryColor: Color(0xff6E9BDF),
       ),
       home: Homepage(),
     );
