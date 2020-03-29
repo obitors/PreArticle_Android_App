@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prearticle/Chapters/Contents.dart';
 import 'package:prearticle/Chapters/chapterData.dart';
 import 'package:prearticle/Chapters/chapterName.dart';
+import 'package:prearticle/Chapters/textSlider.dart';
 
 
 class Homepage extends StatefulWidget {
