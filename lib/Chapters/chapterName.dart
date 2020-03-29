@@ -10,9 +10,21 @@ class _chapter_NameState extends State<chapter_Name> {
   Widget build(BuildContext context) {
     return Container(
       height: 90.0,
+      width: 500,
       color: Color(0xff6E9BDF),
-      child: Text (
-        
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 30,
+        ),
+        child: Text (
+        "100 Ways to mot...",
+        style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
       ),
     );
   }

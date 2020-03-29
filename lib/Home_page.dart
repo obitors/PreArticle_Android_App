@@ -32,7 +32,7 @@ class _HomepageState extends State<Homepage> {
         ),
         ],
       ),
-      body: Column(
+      body: Column (
         children: <Widget>[
           chapter_Name(),
         ]
