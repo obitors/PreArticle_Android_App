@@ -10,6 +10,7 @@ class chapter_data extends StatefulWidget {
 
 double fontsize = 15;
 double sliderValue = 0.0;
+var fontSizeVar = 'small';
 
 class _chapter_dataState extends State<chapter_data> {
   @override
@@ -18,7 +19,7 @@ class _chapter_dataState extends State<chapter_data> {
       children: <Widget>[
         Container(
           width: 500,
-          height: 750,
+          height: 742,
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 20,
@@ -44,41 +45,63 @@ class _chapter_dataState extends State<chapter_data> {
             child: Slider(
               value: sliderValue,
               min: 0,
-              max: 5,
-              divisions: 5,
+              max: 4,
+              divisions: 4,
               onChanged: (value) {
                 setState(
                   () {
                     sliderValue = value;
-                    if (sliderValue >= 0 && sliderValue < 1)
-                    {
+                    if (sliderValue < 1) {
                       fontsize = 15;
+                      fontSizeVar = 'extra small';
                     }
-                    if (sliderValue >= 1 && sliderValue < 2)
-                    {
+                    if (sliderValue >= 1 && sliderValue < 2) {
                       fontsize = 18;
+                      fontSizeVar = 'small';
                     }
-                    if (sliderValue >= 2 && sliderValue < 3)
-                    {
+                    if (sliderValue >= 2 && sliderValue < 3) {
                       fontsize = 21;
+                      fontSizeVar = 'medium';
                     }
-                    if (sliderValue >= 3 && sliderValue < 4)
-                    {
+                    if (sliderValue >= 3 && sliderValue < 4) {
                       fontsize = 24;
+                      fontSizeVar = 'large';
                     }
-                    if (sliderValue >= 4 && sliderValue < 5)
-                    {
+                    if (sliderValue >= 4 && sliderValue < 5) {
                       fontsize = 27;
+                      fontSizeVar = 'Extra Large';
                     }
-                    if (sliderValue >= 5)
-                    {
+                    if (sliderValue >= 5) {
                       fontsize = 30;
+                      fontSizeVar = 'Extra Large';
                     }
                   },
                 );
               },
             ),
           ),
+        ),
+        Container(
+          child: Padding(
+              padding: EdgeInsets.only(
+                left: 35,
+              ),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    'Font Size: ',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    fontSizeVar,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              )),
         ),
       ],
     );
