@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prearticle/Chapters/Contents.dart';
+import 'package:prearticle/Chapters/chapterName.dart';
 
 
 class Homepage extends StatefulWidget {
@@ -18,7 +20,7 @@ class _HomepageState extends State<Homepage> {
           onPressed: () {},
         ),
         title: Text(
-          'Pre Article'
+          ''
         ),
         elevation: 0.0,
         actions: <Widget>[
@@ -32,20 +34,7 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            height: 90.0,
-            width: 500,
-            color: Color(0xff6E9BDF),
-            child: Text(
-              '100 ways to mot...',
-              style: TextStyle(
-                fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              ),
-              
-            ),
-          ),
+          chapter_Name(),
         ]
       ),
     );
