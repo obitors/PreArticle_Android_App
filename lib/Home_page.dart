@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prearticle/Chapters/Contents.dart';
 import 'package:prearticle/Chapters/chapterData.dart';
 import 'package:prearticle/Chapters/chapterName.dart';
-import 'package:prearticle/Chapters/textSlider.dart';
+import 'package:prearticle/Login_Page.dart';
 
 
 class Homepage extends StatefulWidget {
@@ -20,7 +20,9 @@ class _HomepageState extends State<Homepage> {
           icon: Icon(Icons.menu),
           iconSize: 30.0,
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            loginPage();            
+          }
         ),
         title: Text(
           ''
