@@ -26,8 +26,13 @@ class _loginPageState extends State<loginPage> {
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.blockSizeVertical * 13.7),
+                  ),
                   Hero(
                     tag: widget.hashCode,
                     child: Container(
@@ -77,54 +82,74 @@ class _loginPageState extends State<loginPage> {
                 top: -30,
                 right: -30,
                 child: Container(
-                    width: SizeConfig.blockSizeHorizontal * 40,
-                    height: SizeConfig.blockSizeHorizontal * 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Color(0xffe7f0ff),
-                    )),
+                  width: SizeConfig.blockSizeHorizontal * 40,
+                  height: SizeConfig.blockSizeHorizontal * 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Color(0xffe7f0ff),
+                  ),
+                ),
               ),
               Positioned(
                 top: 300,
                 left: -10,
                 child: Container(
-                    width: SizeConfig.blockSizeHorizontal * 12.5,
-                    height: SizeConfig.blockSizeHorizontal * 12.5,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                            colors: [Color(0xffc6d2e3), Color(0xff6e9bdf)]))),
+                  width: SizeConfig.blockSizeHorizontal * 12.5,
+                  height: SizeConfig.blockSizeHorizontal * 12.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                        colors: [Color(0xffc6d2e3), Color(0xff6e9bdf)]),
+                  ),
+                ),
               ),
             ],
           ),
           Container(
-            height: 60,
-            width: MediaQuery.of(context).size.width - 125,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(
-                color: Colors.grey[300],
-                width: 2,
+            child: Text(
+              'Login',
+              style: TextStyle(
+                fontSize: SizeConfig.safeBlockHorizontal * 10,
+                color: Colors.grey[800],
+                fontWeight: FontWeight.bold,
               ),
-              color: Colors.transparent,
             ),
           ),
-          SizedBox(
-            height: 40,
-          ),
-          Container(
-            height: 60,
-            width: MediaQuery.of(context).size.width - 125,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(
-                color: Colors.grey[300],
-                width: 2,
+          Column(
+            children: <Widget>[
+              SizedBox(
+                height: SizeConfig.blockSizeVertical *  4.3,
               ),
-              color: Colors.transparent,
-            ),
+              Container(
+                height: SizeConfig.blockSizeVertical *  5.3,
+                width: SizeConfig.blockSizeHorizontal *  70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: Colors.grey[200],
+                    width: 2,
+                  ),
+                  color: Colors.transparent,
+                ),
+              ),
+              SizedBox(
+                height: SizeConfig.blockSizeVertical *  1.7,
+              ),
+              Container(
+                height: SizeConfig.blockSizeVertical *  5.3,
+                width: SizeConfig.blockSizeHorizontal *  70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: Colors.grey[200],
+                    width: 2,
+                  ),
+                  color: Colors.transparent,
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
 
 class chapter_data extends StatefulWidget {
   chapter_data({Key key}) : super(key: key);
