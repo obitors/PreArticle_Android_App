@@ -120,11 +120,11 @@ class _loginPageState extends State<loginPage> {
           Column(
             children: <Widget>[
               SizedBox(
-                height: SizeConfig.blockSizeVertical *  4.3,
+                height: SizeConfig.blockSizeVertical * 4.3,
               ),
               Container(
-                height: SizeConfig.blockSizeVertical *  5.3,
-                width: SizeConfig.blockSizeHorizontal *  70,
+                height: SizeConfig.blockSizeVertical * 5.3,
+                width: SizeConfig.blockSizeHorizontal * 70,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
@@ -133,13 +133,29 @@ class _loginPageState extends State<loginPage> {
                   ),
                   color: Colors.transparent,
                 ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 20),
+                        width: 200,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.email),
+                            hintText: 'Email address',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ]),
               ),
               SizedBox(
-                height: SizeConfig.blockSizeVertical *  1.7,
+                height: SizeConfig.blockSizeVertical * 1.7,
               ),
               Container(
-                height: SizeConfig.blockSizeVertical *  5.3,
-                width: SizeConfig.blockSizeHorizontal *  70,
+                height: SizeConfig.blockSizeVertical * 5.3,
+                width: SizeConfig.blockSizeHorizontal * 70,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
@@ -148,6 +164,23 @@ class _loginPageState extends State<loginPage> {
                   ),
                   color: Colors.transparent,
                 ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 20),
+                        width: 200,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.lock),
+                            hintText: 'Password',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
               ),
             ],
           ),
