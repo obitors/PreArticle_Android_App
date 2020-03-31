@@ -13,12 +13,13 @@ class _loginPageState extends State<loginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Stack(
             children: <Widget>[
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 1.2,
+                height: MediaQuery.of(context).size.height / 1.7,
               ),
               Positioned(
                 top: 200,
@@ -64,10 +65,30 @@ class _loginPageState extends State<loginPage> {
             ],
           ),
           Container(
-            height: 100,
-            width: 100,
+            height: 60,
+            width: MediaQuery.of(context).size.width -125,
             decoration: BoxDecoration(
-              color: Colors.blue,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: Colors.grey[300],
+                width: 2,
+              ),
+              color: Colors.transparent,
+            ),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Container(
+            height: 60,
+            width: MediaQuery.of(context).size.width -125,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: Colors.grey[300],
+                width: 2,
+              ),
+              color: Colors.transparent,
             ),
           ),
         ],
