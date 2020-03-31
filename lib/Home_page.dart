@@ -21,7 +21,10 @@ class _HomepageState extends State<Homepage> {
           iconSize: 30.0,
           color: Colors.white,
           onPressed: () {
-            loginPage();            
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => loginPage()),
+            );         
           }
         ),
         title: Text(

@@ -16,7 +16,7 @@ class PreArticle extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xff6E9BDF),
       ),
-      home: loginPage(),
+      home: Homepage(),
     );
   }
 }
