@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_responsive_screen/flutter_responsive_screen.dart';
 import 'package:prearticle/Chapters/Contents.dart';
 import 'package:prearticle/Chapters/chapterData.dart';
 import 'package:prearticle/Chapters/chapterName.dart';
 import 'package:prearticle/Login_Page.dart';
+import 'package:prearticle/Configuration/app_config.dart';
+
 
 
 class Homepage extends StatefulWidget {
   @override
   _HomepageState createState() => _HomepageState();
 }
+
+
 
 class _HomepageState extends State<Homepage> {
   @override

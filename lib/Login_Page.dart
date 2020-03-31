@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prearticle/Configuration/app_config.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -11,39 +12,73 @@ class loginPage extends StatefulWidget {
 class _loginPageState extends State<loginPage> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Stack(
             children: <Widget>[
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: SizeConfig.blockSizeVertical * 47,
               ),
-              Positioned(
-                top: 200,
-                left: (MediaQuery.of(context).size.width / 2) - 125,
-                child: Hero(
-                  tag: widget.hashCode,
-                  child: Container(
-                    width: 250,
-                    height: 350,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/logo.png'),
-                        fit: BoxFit.fill,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Hero(
+                    tag: widget.hashCode,
+                    child: Container(
+                      width: SizeConfig.blockSizeHorizontal * 26.7,
+                      height: SizeConfig.blockSizeHorizontal * 36.3,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/logo.png'),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Text(
+                        'Pre ',
+                        style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 7,
+                          color: Color(0xff6e9bdf),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Article',
+                        style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 7,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'Book Store',
+                    style: TextStyle(
+                      fontSize: SizeConfig.safeBlockHorizontal * 5.5,
+                      letterSpacing: 3.6,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                ],
               ),
               Positioned(
                 top: -30,
                 right: -30,
                 child: Container(
-                    width: 200,
-                    height: 200,
+                    width: SizeConfig.blockSizeHorizontal * 40,
+                    height: SizeConfig.blockSizeHorizontal * 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
                       color: Color(0xffe7f0ff),
@@ -53,8 +88,8 @@ class _loginPageState extends State<loginPage> {
                 top: 300,
                 left: -10,
                 child: Container(
-                    width: 70,
-                    height: 70,
+                    width: SizeConfig.blockSizeHorizontal * 12.5,
+                    height: SizeConfig.blockSizeHorizontal * 12.5,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         gradient: LinearGradient(
@@ -66,7 +101,7 @@ class _loginPageState extends State<loginPage> {
           ),
           Container(
             height: 60,
-            width: MediaQuery.of(context).size.width -125,
+            width: MediaQuery.of(context).size.width - 125,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
@@ -81,7 +116,7 @@ class _loginPageState extends State<loginPage> {
           ),
           Container(
             height: 60,
-            width: MediaQuery.of(context).size.width -125,
+            width: MediaQuery.of(context).size.width - 125,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
