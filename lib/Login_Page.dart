@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prearticle/Chapters/Contents_List.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 
 class loginPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _loginPageState extends State<loginPage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,6 +179,7 @@ class _loginPageState extends State<loginPage> {
                             hintText: 'Password',
                             border: InputBorder.none,
                           ),
+                          obscureText: true,
                         ),
                       ),
                     ]),
@@ -185,21 +187,29 @@ class _loginPageState extends State<loginPage> {
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 4.3,
               ),
-              Container(
-                height: SizeConfig.blockSizeHorizontal * 15,
-                width: SizeConfig.blockSizeHorizontal * 15,
-                decoration: BoxDecoration(
-                    color: Color(0xff6e9bdf),
-                    borderRadius: BorderRadius.circular(50)),
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.white,
-                  size: 30,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Contents()),
+                  );
+                },
+                child: Container(
+                  height: SizeConfig.blockSizeHorizontal * 15,
+                  width: SizeConfig.blockSizeHorizontal * 15,
+                  decoration: BoxDecoration(
+                      color: Color(0xff6e9bdf),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
               ),
               SizedBox(
-                        height: SizeConfig.blockSizeVertical * 10,
-                      ),
+                height: SizeConfig.blockSizeVertical * 10,
+              ),
               Container(
                 child: Text('Forgot Password'),
               ),

@@ -32,6 +32,7 @@ class _HomepageState extends State<Homepage> {
             );         
           }
         ),
+        centerTitle: true,
         title: Text(
           ''
         ),
