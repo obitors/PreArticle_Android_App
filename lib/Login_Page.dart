@@ -14,6 +14,7 @@ class _loginPageState extends State<loginPage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,8 +180,48 @@ class _loginPageState extends State<loginPage> {
                           ),
                         ),
                       ),
-                    ]
-                  ),
+                    ]),
+              ),
+              SizedBox(
+                height: SizeConfig.blockSizeVertical * 4.3,
+              ),
+              Container(
+                height: SizeConfig.blockSizeHorizontal * 15,
+                width: SizeConfig.blockSizeHorizontal * 15,
+                decoration: BoxDecoration(
+                    color: Color(0xff6e9bdf),
+                    borderRadius: BorderRadius.circular(50)),
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              SizedBox(
+                        height: SizeConfig.blockSizeVertical * 10,
+                      ),
+              Container(
+                child: Text('Forgot Password'),
+              ),
+              SizedBox(
+                height: SizeConfig.blockSizeVertical * 1.7,
+              ),
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          'Don\'t have an account: ',
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Text('SignUp?'),
+                      ),
+                    ]),
               ),
             ],
           ),
