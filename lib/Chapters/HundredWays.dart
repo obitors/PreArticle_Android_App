@@ -14,7 +14,7 @@ class Hundred_ways extends StatefulWidget {
 }
 
 class _Hundred_waysState extends State<Hundred_ways> {
-  final String url = 'https://textbin.online/QaV2QNSoA7';
+  final String url = 'https://github.com/obitors/PreArticle_Android_App/blob/master/Data/100%20Ways.json';
   List data;
   double percen=30;
   @override
