@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
-import 'package:prearticle/100ways.dart';
 
 class Hundred_ways extends StatefulWidget {
   Hundred_ways({Key key}) : super(key: key);
@@ -15,7 +14,7 @@ class Hundred_ways extends StatefulWidget {
 }
 
 class _Hundred_waysState extends State<Hundred_ways> {
-  final String url = 'https://github.com/obitors/PreArticle_Android_App/blob/master/Data/100%20Ways.json';
+  final String url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/100Ways.json';
   List data;
   double percen=30;
   @override
@@ -24,17 +23,12 @@ class _Hundred_waysState extends State<Hundred_ways> {
     this.getJsonData();
   }
 
-  Future<List<ways>> getJsonData() async {
+  Future<String> getJsonData() async {
     var response = await http.get(url);
     print(response.body);
-    var way = List<ways>();
     setState(() {
       var convertDataToJson = jsonDecode(response.body);
       data = convertDataToJson['results'];
-      for (var i in convertDataToJson)
-      {
-        way.add(ways.fromJson(i));
-      }
     });
     return "success";
   }

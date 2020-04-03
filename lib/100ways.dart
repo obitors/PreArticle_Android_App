@@ -5,7 +5,7 @@ class ways {
   ways(this.name, this.data);
 
   ways.fromJson(Map<String, dynamic> json) {
-    name = json['title'];
-    data = json['text'];
+    name = json['name'];
+    data = json['data'];
   }
 }
