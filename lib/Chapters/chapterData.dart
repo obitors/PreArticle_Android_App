@@ -20,7 +20,7 @@ var fontSizeVar = 'small';
 class _chapter_dataState extends State<chapter_data> {
   @override
 
-    final String url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/100Ways.json';
+    final String url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/Chapter_1.json';
   List data;
   double percen=30;
   @override
@@ -52,9 +52,8 @@ class _chapter_dataState extends State<chapter_data> {
               horizontal: 20,
               vertical: 20,
             ),
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                itemCount: data.length,
+            child: ListView.builder(
+                itemCount: data == null? 0 : data.length,
                 itemBuilder: (BuildContext context, int index) {
                 return Text(
                 data[index]['para'],
@@ -65,7 +64,6 @@ class _chapter_dataState extends State<chapter_data> {
               );
                },
               ),
-            ),
           ),
         ),
         Container(
