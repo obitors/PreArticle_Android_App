@@ -1,6 +1,5 @@
 {
     "count": 5, 
-    "next": "https://swapi.co/api/people/?page=2", 
     "previous": null, 
     "results": [
         {
