@@ -20,6 +20,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    final String todo = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Color(0xff6e9bdf),
       appBar: AppBar(
@@ -36,7 +37,7 @@ class _HomepageState extends State<Homepage> {
         ),
         centerTitle: true,
         title: Text(
-          ''
+          todo,
         ),
         elevation: 0.0,
         actions: <Widget>[
@@ -51,6 +52,7 @@ class _HomepageState extends State<Homepage> {
       body: Column (
         children: <Widget>[
           chapter_Name(),
+          Text(todo),
           Expanded(
             child: Container(
               decoration: BoxDecoration(

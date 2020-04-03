@@ -55,7 +55,7 @@ class _chapter_dataState extends State<chapter_data> {
             child: ListView.builder(
                 itemCount: data == null? 0 : data.length,
                 itemBuilder: (BuildContext context, int index) {
-                return Text(
+                return SelectableText(
                 data[index]['para'],
                 style: TextStyle(
                   fontSize: fontsize,
