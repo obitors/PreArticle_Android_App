@@ -19,8 +19,8 @@ var fontSizeVar = 'small';
 
 class _chapter_dataState extends State<chapter_data> {
   @override
-
-    final String url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/Chapter_1.json';
+  
+  final String url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/Chapter_1.json';
   List data;
   double percen=30;
   @override

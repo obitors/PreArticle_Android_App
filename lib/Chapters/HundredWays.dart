@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:prearticle/Home_page.dart';
+import 'package:prearticle/Chapter_Data_Class.dart';
 
 class Hundred_ways extends StatefulWidget {
   Hundred_ways({Key key}) : super(key: key);
@@ -13,47 +14,7 @@ class Hundred_ways extends StatefulWidget {
   _Hundred_waysState createState() => _Hundred_waysState();
 }
 
-class Data {
-  final String name;
-  final String data;
-  final String readTime;
-  final String speechTime;
-  final String words;
-  final String characters;
-
-  Data({this.name, this.data, this.readTime, this.speechTime, this.words, this.characters});
-
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
-      name: json['name'] as String,
-      data: json['data'] as String,
-      readTime: json['readTime'] as String,
-      speechTime: json['speechTime'] as String,
-      words: json['words'],
-      characters: json['characters'],
-    );
-  }
-}
-
 class _Hundred_waysState extends State<Hundred_ways> {
-
-  final String url =
-      'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/100Ways.json';
-  List data;
-  double percen = 30;
-  @override
-
-
-  Future<String> getJsonData() async {
-    var response = await http.get(url);
-    print(response.body);
-    setState(() {
-      var convertDataToJson = jsonDecode(response.body).cast<Map<String, dynamic>>();
-      data = convertDataToJson['results'];
-    });
-    return "success";
-  }
-
 
   List<Data> _data = List<Data>();
 
@@ -80,12 +41,6 @@ class _Hundred_waysState extends State<Hundred_ways> {
     });
     super.initState();
   }
-
-
-
-
-
-
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +83,7 @@ class _Hundred_waysState extends State<Hundred_ways> {
                                         builder: (BuildContext context) =>
                                             Homepage(),
                                         settings: RouteSettings(
-                                            arguments: data[index])),
+                                            arguments: _data[index])),
                                   );
                                 },
                                 child: Padding(

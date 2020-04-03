@@ -7,7 +7,39 @@ import 'package:prearticle/Login_Page.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:prearticle/Chapter_Data_Class.dart';
 
+
+
+class DataProvider extends InheritedWidget {
+  
+  final Data datas;
+  DataProvider({this.datas, Widget child}):super(child:child);
+
+    @override
+  bool updateShouldNotify(DataProvider oldWidget) {
+    return true;
+  }
+
+  static DataProvider of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType(aspect: DataProvider);
+}
+
+
+class ParentProvider extends InheritedWidget {
+  final String title;
+  final Widget child;
+
+  ParentProvider({this.title, this.child});
+
+  @override
+  bool updateShouldNotify(ParentProvider oldWidget) {
+    return true;
+  }
+
+  static ParentProvider of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(ParentProvider);
+}
 
 
 class Homepage extends StatefulWidget {
@@ -16,11 +48,10 @@ class Homepage extends StatefulWidget {
 }
 
 
-
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    final String todo = ModalRoute.of(context).settings.arguments;
+    final Data data = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Color(0xff6e9bdf),
       appBar: AppBar(
@@ -37,7 +68,7 @@ class _HomepageState extends State<Homepage> {
         ),
         centerTitle: true,
         title: Text(
-          todo,
+          '',
         ),
         elevation: 0.0,
         actions: <Widget>[
@@ -51,8 +82,8 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Column (
         children: <Widget>[
-          chapter_Name(),
-          Text(todo),
+          chapter_Name(Data: data),
+          Text(data.name),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
