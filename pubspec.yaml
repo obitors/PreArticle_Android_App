@@ -15,6 +15,7 @@ dependencies:
   path_provider: ^0.4.1
   cupertino_icons: ^0.1.2
   firebase_storage:
+  flutter_placeholder_textlines: ^1.0.4
 
 dev_dependencies:
   flutter_test:

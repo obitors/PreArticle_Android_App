@@ -29,8 +29,11 @@ class _Hundred_waysState extends State<Hundred_ways> {
       for (var noteJson in notesJson) {
         datas.add(Data.fromJson(noteJson));
       }
+      return datas;
     }
-    return datas;
+     else {
+    return List<Data>();
+  } 
   }
 
   void initState() {

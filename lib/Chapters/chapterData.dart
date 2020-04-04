@@ -2,28 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter_placeholder_textlines/flutter_placeholder_textlines.dart';
 
 class chapter_data extends StatefulWidget {
   final String link;
   chapter_data({this.link});
   @override
-  _chapter_dataState createState() => _chapter_dataState(url:link);
+  _chapter_dataState createState() => _chapter_dataState(url: link);
 }
 
 double fontsize = 15;
 double sliderValue = 0.0;
 var fontSizeVar = 'small';
 
-
-
 class _chapter_dataState extends State<chapter_data> {
-
   String url;
   _chapter_dataState({this.url});
-  double percen=30;
+  double percen = 30;
 
-  
   List data;
   @override
   void initState() {
@@ -41,31 +37,53 @@ class _chapter_dataState extends State<chapter_data> {
     return "success";
   }
 
-
   Widget build(BuildContext context) {
-    
     return Column(
       children: <Widget>[
-        Container(
-          width: 500,
-          height: 742,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 20,
-            ),
-            child: ListView.builder(
-                itemCount: data == null? 0 : data.length,
-                itemBuilder: (BuildContext context, int index) {
-                return SelectableText(
-                data[index]['para'],
-                style: TextStyle(
-                  fontSize: fontsize,
-                  color: Colors.grey[600],
-                ),
-              );
-               },
-              ),
+        Expanded(
+          flex: 1,
+          child: FutureBuilder(
+            future: getJsonData(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
+                return Padding(
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  child: Container(
+                    width: double.infinity,
+                    child: PlaceholderLines(
+                      count: 300,
+                      animate: true,
+                      color: Colors.grey[300],
+                    ),
+                  ),
+                );
+              } else {
+                return Padding(
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  child: Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 20,
+                      ),
+                      child: ListView.builder(
+                        itemCount: data == null ? 0 : data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return SelectableText(
+                            data[index]['para'],
+                            style: TextStyle(
+                              fontSize: fontsize,
+                              color: Colors.grey[600],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
           ),
         ),
         Container(
