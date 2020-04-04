@@ -9,44 +9,10 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:prearticle/Chapter_Data_Class.dart';
 
-
-
-class DataProvider extends InheritedWidget {
-  
-  final Data datas;
-  DataProvider({this.datas, Widget child}):super(child:child);
-
-    @override
-  bool updateShouldNotify(DataProvider oldWidget) {
-    return true;
-  }
-
-  static DataProvider of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType(aspect: DataProvider);
-}
-
-
-class ParentProvider extends InheritedWidget {
-  final String title;
-  final Widget child;
-
-  ParentProvider({this.title, this.child});
-
-  @override
-  bool updateShouldNotify(ParentProvider oldWidget) {
-    return true;
-  }
-
-  static ParentProvider of(BuildContext context) =>
-      context.inheritFromWidgetOfExactType(ParentProvider);
-}
-
-
 class Homepage extends StatefulWidget {
   @override
   _HomepageState createState() => _HomepageState();
 }
-
 
 class _HomepageState extends State<Homepage> {
   @override
@@ -56,16 +22,15 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: Color(0xff6e9bdf),
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.menu),
-          iconSize: 30.0,
-          color: Colors.white,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => loginPage()),
-            );         
-          }
-        ),
+            icon: Icon(Icons.menu),
+            iconSize: 30.0,
+            color: Colors.white,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => loginPage()),
+              );
+            }),
         centerTitle: true,
         title: Text(
           '',
@@ -73,22 +38,41 @@ class _HomepageState extends State<Homepage> {
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
-          icon: Icon(Icons.search),
-          iconSize: 30.0,
-          color: Colors.white,
-          onPressed: () {},
-        ),
+            icon: Icon(Icons.search),
+            iconSize: 30.0,
+            color: Colors.white,
+            onPressed: () {},
+          ),
         ],
       ),
-      body: Column (
+      body: Column(
         children: <Widget>[
-          chapter_Name(Data: data),
-          Text(data.name),
+          Container(
+            height: 90.0,
+            width: 500,
+            color: Color(0xff6E9BDF),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 30,
+              ),
+              child: Text(
+                data.name,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
               ),
               child: chapter_data(),
             ),
@@ -98,3 +82,4 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
+

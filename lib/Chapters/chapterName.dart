@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:prearticle/Chapter_Data_Class.dart';
 
 class chapter_Name extends StatefulWidget {
+  chapter_Name(Data data);
+
   @override
   _chapter_NameState createState() => _chapter_NameState();
 }
