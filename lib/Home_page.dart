@@ -15,6 +15,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+
   @override
   Widget build(BuildContext context) {
     final Data data = ModalRoute.of(context).settings.arguments;
@@ -47,25 +48,7 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            height: 90.0,
-            width: 500,
-            color: Color(0xff6E9BDF),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 30,
-              ),
-              child: Text(
-                data.name,
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+          chapter_Name(name: data.name),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -74,7 +57,9 @@ class _HomepageState extends State<Homepage> {
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25)),
               ),
-              child: chapter_data(),
+              child: chapter_data(
+                link: data.data,
+              ),
             ),
           ),
         ],

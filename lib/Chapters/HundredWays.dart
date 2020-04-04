@@ -34,6 +34,7 @@ class _Hundred_waysState extends State<Hundred_ways> {
   }
 
   void initState() {
+    this.widget;
     fetchNotes().then((value) {
       setState(() {
         _data.addAll(value);

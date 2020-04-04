@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:prearticle/Chapter_Data_Class.dart';
 
 class chapter_Name extends StatefulWidget {
-  chapter_Name(Data data);
+  String name;
+  chapter_Name({this.name});
 
   @override
   _chapter_NameState createState() => _chapter_NameState();
@@ -21,7 +22,7 @@ class _chapter_NameState extends State<chapter_Name> {
           vertical: 30,
         ),
         child: Text (
-        "100 Ways to mot...",
+        widget.name,
         style: TextStyle(
           fontSize: 30,
           fontWeight: FontWeight.bold,

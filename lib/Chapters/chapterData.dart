@@ -5,10 +5,10 @@ import 'dart:convert';
 
 
 class chapter_data extends StatefulWidget {
-  chapter_data({Key key}) : super(key: key);
-
+  final String link;
+  chapter_data({this.link});
   @override
-  _chapter_dataState createState() => _chapter_dataState();
+  _chapter_dataState createState() => _chapter_dataState(url:link);
 }
 
 double fontsize = 15;
@@ -18,11 +18,13 @@ var fontSizeVar = 'small';
 
 
 class _chapter_dataState extends State<chapter_data> {
-  @override
-  
-  final String url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/Chapter_1.json';
-  List data;
+
+  String url;
+  _chapter_dataState({this.url});
   double percen=30;
+
+  
+  List data;
   @override
   void initState() {
     super.initState();

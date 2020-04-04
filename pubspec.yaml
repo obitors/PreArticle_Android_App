@@ -14,6 +14,7 @@ dependencies:
   http: any
   path_provider: ^0.4.1
   cupertino_icons: ^0.1.2
+  firebase_storage:
 
 dev_dependencies:
   flutter_test:
