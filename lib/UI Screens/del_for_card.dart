@@ -34,7 +34,7 @@ class MoviesConceptPage extends StatefulWidget {
 class _MoviesConceptPageState extends State<MoviesConceptPage> {
 
 
-  final pageController = PageController(viewportFraction: .7);
+  final pageController = PageController(viewportFraction: .8);
   final ValueNotifier<double> _pageNotifier = ValueNotifier(0.0);
 
   void _listener() {
@@ -77,7 +77,7 @@ class _MoviesConceptPageState extends State<MoviesConceptPage> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Card(
-                        color: Colors.blue,
+                        color: Colors.transparent,
                         borderOnForeground: true,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -95,7 +95,7 @@ class _MoviesConceptPageState extends State<MoviesConceptPage> {
                                 flex: 3,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 0.0, left: 20.0, right: 20.0),
+                                      top: 0.0, left: 20.0, right: 20.0, bottom: 20),
                                   child: ClipRRect(
                                     borderRadius: borderRadius,
                                     child: Image.network(

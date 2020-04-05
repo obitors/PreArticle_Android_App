@@ -15,17 +15,22 @@ class _BookSeriesWidgetState extends State<BookSeriesWidget> {
       scrollDirection: Axis.horizontal,
       itemCount: 7,
       itemBuilder: (BuildContext context, int index) {
-      return Padding(
-        padding: EdgeInsets.only(right: 10,left: 10),
-        child: Container(
-        width: 250,
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(15)
-        ),
-      ),  
-      );
-     },
+        return Padding(
+          padding: EdgeInsets.only(right: 10, left: 10),
+          child: Container(
+            width: 250,
+            decoration: BoxDecoration(
+                color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
