@@ -18,6 +18,7 @@ dependencies:
   flutter_placeholder_textlines: ^1.0.4
   font_awesome_flutter: ^8.8.1
   splashscreen: ^1.2.0
+  bubble_bottom_bar: ^1.2.0
 
 dev_dependencies:
   flutter_test:
