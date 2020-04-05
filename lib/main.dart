@@ -3,6 +3,7 @@ import 'package:prearticle/Home_page.dart';
 import 'package:prearticle/Login_Page.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:prearticle/UI%20Screens/Splash_Screen.dart';
 
 void main() => runApp(
   PreArticle()
@@ -18,7 +19,7 @@ class PreArticle extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xff6E9BDF),
       ),
-      home: loginPage(),
+      home: splash(),
     );
   }
 }
