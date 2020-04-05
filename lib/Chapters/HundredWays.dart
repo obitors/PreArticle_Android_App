@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
-import 'package:prearticle/Home_page.dart';
 import 'package:prearticle/Chapter_Data_Class.dart';
+import 'package:prearticle/UI%20Screens/Reading_Page.dart';
 
 class Hundred_ways extends StatefulWidget {
   Hundred_ways({Key key}) : super(key: key);
@@ -85,7 +85,7 @@ class _Hundred_waysState extends State<Hundred_ways> {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            Homepage(),
+                                            ReadingPage(),
                                         settings: RouteSettings(
                                             arguments: _data[index])),
                                   );
@@ -117,7 +117,8 @@ class _Hundred_waysState extends State<Hundred_ways> {
                     ),
                   ),
                 ],
-              ));
+              ),
+            );
         },
       ),
     );

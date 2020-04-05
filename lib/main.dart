@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:prearticle/Home_page.dart';
-import 'package:prearticle/Login_Page.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:prearticle/UI%20Screens/Splash_Screen.dart';
+import 'UI Screens/SplashScreen.dart';
 
 void main() => runApp(
   PreArticle()

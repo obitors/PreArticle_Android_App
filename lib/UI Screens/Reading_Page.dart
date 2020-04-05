@@ -9,12 +9,12 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:prearticle/Chapter_Data_Class.dart';
 
-class Homepage extends StatefulWidget {
+class ReadingPage extends StatefulWidget {
   @override
-  _HomepageState createState() => _HomepageState();
+  _ReadingPageState createState() => _ReadingPageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _ReadingPageState extends State<ReadingPage> {
 
   @override
   Widget build(BuildContext context) {

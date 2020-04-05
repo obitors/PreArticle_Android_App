@@ -46,16 +46,23 @@ class _chapter_dataState extends State<chapter_data> {
             future: getJsonData(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.data == null) {
-                return Padding(
+                return Column(
+                  children: <Widget>[
+                    Expanded(
+                  flex: 1,
+                    child: Padding(
                   padding: EdgeInsets.only(left: 5, right: 5),
                   child: Container(
                     width: double.infinity,
                     child: PlaceholderLines(
-                      count: 300,
+                      count: 20,
                       animate: true,
                       color: Colors.grey[300],
                     ),
                   ),
+                ),
+                ),
+                  ],
                 );
               } else {
                 return Padding(

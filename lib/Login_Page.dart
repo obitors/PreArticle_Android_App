@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Chapters/Contents_List.dart';
 import 'package:prearticle/Configuration/app_config.dart';
+import 'package:prearticle/UI%20Screens/Home_Screen.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -37,45 +38,49 @@ class _loginPageState extends State<loginPage> {
                   ),
                   Hero(
                     tag: widget.hashCode,
-                    child: Container(
-                      width: SizeConfig.blockSizeHorizontal * 26.7,
-                      height: SizeConfig.blockSizeHorizontal * 36.3,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
-                          fit: BoxFit.fill,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          width: SizeConfig.blockSizeHorizontal * 26.7,
+                          height: SizeConfig.blockSizeHorizontal * 36.3,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/logo.png'),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Text(
-                        'Pre ',
-                        style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 7,
-                          color: Color(0xff6e9bdf),
-                          fontWeight: FontWeight.bold,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Text(
+                              'Pre ',
+                              style: TextStyle(
+                                fontSize: SizeConfig.safeBlockHorizontal * 7,
+                                color: Color(0xff6e9bdf),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Article',
+                              style: TextStyle(
+                                fontSize: SizeConfig.safeBlockHorizontal * 7,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Text(
-                        'Article',
-                        style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 7,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
+                        Text(
+                          'Book Store',
+                          style: TextStyle(
+                            fontSize: SizeConfig.safeBlockHorizontal * 5.5,
+                            letterSpacing: 3.6,
+                            color: Colors.grey[500],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    'Book Store',
-                    style: TextStyle(
-                      fontSize: SizeConfig.safeBlockHorizontal * 5.5,
-                      letterSpacing: 3.6,
-                      color: Colors.grey[500],
+                      ],
                     ),
                   ),
                 ],
@@ -191,7 +196,7 @@ class _loginPageState extends State<loginPage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => Contents()),
+                        builder: (BuildContext context) => HomePage()),
                   );
                 },
                 child: Container(
