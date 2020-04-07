@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prearticle/Chapters/Contents_List.dart';
 import 'package:prearticle/Configuration/app_config.dart';
-import 'package:prearticle/UI%20Screens/Home_Screen.dart';
-import 'package:prearticle/UI%20Screens/del_for_card.dart';
+import 'package:prearticle/Screens/Home.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -197,7 +195,7 @@ class _loginPageState extends State<loginPage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage()),
+                        builder: (BuildContext context) => HomePage(onPressed: () {  },)),
                   );
                 },
                 child: Container(

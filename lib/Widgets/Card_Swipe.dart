@@ -13,25 +13,25 @@ const movies = [
       url: 'https://i.ytimg.com/vi/YcHKrNMwWyQ/movieposter.jpg', title: 'Dorazvuuvvvvv'),
   const Movie(
       url:
-          'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
+      'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
       title: 'Jokernjinininibn'),
   const Movie(
       url:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRAog3B6UEzMDOhehRXmjQbV2qYGOHYMh3jGGwqL7zwnwRJ6YyD',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRAog3B6UEzMDOhehRXmjQbV2qYGOHYMh3jGGwqL7zwnwRJ6YyD',
       title: 'Predatorvghvgubvgu'),
   const Movie(
     url:
-        'https://images-na.ssl-images-amazon.com/images/I/719fSnntGgL._AC_SL1500_.jpg',
+    'https://images-na.ssl-images-amazon.com/images/I/719fSnntGgL._AC_SL1500_.jpg',
     title: 'Anabellebhbjhbjhb',
   ),
 ];
 
-class MoviesConceptPage extends StatefulWidget {
+class CardSwipe extends StatefulWidget {
   @override
-  _MoviesConceptPageState createState() => _MoviesConceptPageState();
+  _CardSwipeState createState() => _CardSwipeState();
 }
 
-class _MoviesConceptPageState extends State<MoviesConceptPage> {
+class _CardSwipeState extends State<CardSwipe> {
 
 
   final pageController = PageController(viewportFraction: .8);
@@ -63,11 +63,11 @@ class _MoviesConceptPageState extends State<MoviesConceptPage> {
               controller: pageController,
               itemBuilder: (context, index) {
                 final lerp =
-                    lerpDouble(0, 0, (index - _pageNotifier.value).abs());
+                lerpDouble(0, 0, (index - _pageNotifier.value).abs());
                 double opacity =
-                    lerpDouble(0.0, .3, (index - _pageNotifier.value).abs());
+                lerpDouble(0.0, .3, (index - _pageNotifier.value).abs());
                 double heights =
-                    lerpDouble(size.height / 2, size.height / 2.2, (index - _pageNotifier.value).abs());
+                lerpDouble(size.height / 2, size.height / 2.2, (index - _pageNotifier.value).abs());
                 if (opacity > 1.0) opacity = 1.0;
                 if (opacity < 0.0) opacity = 0.0;
                 return Transform.translate(

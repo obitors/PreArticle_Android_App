@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prearticle/Chapter_Data_Class.dart';
 
 class chapter_Name extends StatefulWidget {
   String name;

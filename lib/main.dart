@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:prearticle/UI%20Screens/Splash_Screen.dart';
-import 'UI Screens/SplashScreen.dart';
+import 'package:prearticle/Screens/Splash_Screen.dart';
+
 
 void main() => runApp(
-  PreArticle()
-  );
+    PreArticle()
+);
 
 class PreArticle extends StatelessWidget {
   // This widget is the root of your application.

@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
-import 'package:prearticle/Chapter_Data_Class.dart';
-import 'package:prearticle/UI%20Screens/Reading_Page.dart';
+import 'package:prearticle/Screens/Reading_Page.dart';
+import 'package:prearticle/objects/Chapter_Data_Class.dart';
 
 class Hundred_ways extends StatefulWidget {
   Hundred_ways({Key key}) : super(key: key);
@@ -21,9 +21,7 @@ class _Hundred_waysState extends State<Hundred_ways> {
   Future<List<Data>> fetchNotes() async {
     var url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/100Ways.json';
     var response = await http.get(url);
-    
     var datas = List<Data>();
-    
     if (response.statusCode == 200) {
       var notesJson = json.decode(response.body);
       for (var noteJson in notesJson) {

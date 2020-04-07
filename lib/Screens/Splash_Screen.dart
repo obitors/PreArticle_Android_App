@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'package:prearticle/Login_Page.dart';
-import 'package:splashscreen/splashscreen.dart';
+import 'package:prearticle/Screens/Login_Page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,41 +23,41 @@ class _splashState extends State<splash> {
   Future<Timer> loadData() async {
     return new Timer(Duration(seconds: 2), onDoneLoading);
   }
-var logo;
+  var logo;
   onDoneLoading() async {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(
-          builder: (context) => loginPage(), 
-        ),);
+      builder: (context) => loginPage(onPressed: () {  },),
+    ),);
   }
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-        return Scaffold(
-          body: Container(
-            child: Center(
-              child: Container(
-                height: SizeConfig.blockSizeHorizontal * 90,
-                width: SizeConfig.blockSizeHorizontal * 37,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Hero(
-                      tag: widget.hashCode,
+    return Scaffold(
+      body: Container(
+        child: Center(
+          child: Container(
+            height: SizeConfig.blockSizeHorizontal * 90,
+            width: SizeConfig.blockSizeHorizontal * 37,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Hero(
+                  tag: widget.hashCode,
                   child: Column(
                     children: <Widget>[
                       Container(
-                      width: SizeConfig.blockSizeHorizontal * 37,
-                      height: SizeConfig.blockSizeHorizontal * 50,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
-                          fit: BoxFit.fill,
+                        width: SizeConfig.blockSizeHorizontal * 37,
+                        height: SizeConfig.blockSizeHorizontal * 50,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/logo.png'),
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
-                    ),
                       Container(
                         child: Column(
                           children: <Widget>[
@@ -72,7 +71,7 @@ var logo;
                                   'Pre ',
                                   style: TextStyle(
                                     fontSize:
-                                        SizeConfig.safeBlockHorizontal * 7,
+                                    SizeConfig.safeBlockHorizontal * 7,
                                     color: Color(0xff6e9bdf),
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -81,7 +80,7 @@ var logo;
                                   'Article',
                                   style: TextStyle(
                                     fontSize:
-                                        SizeConfig.safeBlockHorizontal * 7,
+                                    SizeConfig.safeBlockHorizontal * 7,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.grey[700],
                                   ),

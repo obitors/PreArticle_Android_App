@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
-import 'package:prearticle/Chapters/HundredWays.dart';
-import 'package:prearticle/Chapters/chapterData.dart';
+import 'package:prearticle/Widgets/HundredWays.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 
@@ -13,7 +12,6 @@ class Contents extends StatefulWidget {
 }
 
 double percent = 50;
-
 class _ContentsState extends State<Contents> {
   @override
   Widget build(BuildContext context) {
@@ -90,8 +88,8 @@ class _ContentsState extends State<Contents> {
               ],
             ),
           ),
-          Expanded(
-            child: Container(
+          Expanded (
+            child: Container (
               width: double.infinity,
               decoration: BoxDecoration(color: Colors.white,),
               child: Hundred_ways(),

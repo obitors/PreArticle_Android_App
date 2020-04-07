@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_responsive_screen/flutter_responsive_screen.dart';
-import 'package:prearticle/Chapters/Contents.dart';
-import 'package:prearticle/Chapters/chapterData.dart';
-import 'package:prearticle/Chapters/chapterName.dart';
-import 'package:prearticle/Login_Page.dart';
 import 'package:prearticle/Configuration/app_config.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:prearticle/Screens/Login_Page.dart';
+import 'package:prearticle/Widgets/chapterData.dart';
+import 'package:prearticle/Widgets/chapterName.dart';
 import 'dart:io';
-import 'package:prearticle/Chapter_Data_Class.dart';
+import 'package:prearticle/objects/Chapter_Data_Class.dart';
 
 class ReadingPage extends StatefulWidget {
   @override
@@ -29,7 +26,7 @@ class _ReadingPageState extends State<ReadingPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => loginPage()),
+                MaterialPageRoute(builder: (context) => loginPage(onPressed: () {  },)),
               );
             }),
         centerTitle: true,
