@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prearticle/Screens/Splash_Screen.dart';
+import 'package:prearticle/notifier/Firebase_Auth_Notifier.dart';
+import 'package:provider/provider.dart';
+import '';
 
 
-void main() => runApp(
-    PreArticle()
-);
+void main() => runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          builder: (context) => AuthNotifier(),
+        ),
+      ],
+      child: PreArticle(),
+    ));
 
 class PreArticle extends StatelessWidget {
   // This widget is the root of your application.

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Screens/Home.dart';
+import 'package:prearticle/objects/Auth_User.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -10,13 +11,22 @@ class loginPage extends StatefulWidget {
   final GestureTapCallback onPressed;
 }
 
+enum AuthMode {Login, Signup}
+
 class _loginPageState extends State<loginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = new TextEditingController();
+  AuthMode _authMode = AuthMode.Login;
+
+  User _user = User();
+
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
+      body: Column (
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -195,7 +205,9 @@ class _loginPageState extends State<loginPage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage(onPressed: () {  },)),
+                        builder: (BuildContext context) => HomePage(
+                              onPressed: () {},
+                            )),
                   );
                 },
                 child: Container(
@@ -212,7 +224,19 @@ class _loginPageState extends State<loginPage> {
                 ),
               ),
               SizedBox(
-                height: SizeConfig.blockSizeVertical * 10,
+                height: SizeConfig.blockSizeVertical * 9,
+              ),
+              Container(
+                child: Text(
+                  'SignIn With Google',
+                  style: TextStyle(
+                    color: Color(0xff6e9bdf),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: SizeConfig.blockSizeVertical * 1.7,
               ),
               Container(
                 child: Text('Forgot Password'),
@@ -222,20 +246,21 @@ class _loginPageState extends State<loginPage> {
               ),
               Container(
                 child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          'Don\'t have an account: ',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                          ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        'Don\'t have an account: ',
+                        style: TextStyle(
+                          color: Colors.grey[500],
                         ),
                       ),
-                      Container(
-                        child: Text('SignUp?'),
-                      ),
-                    ]),
+                    ),
+                    Container(
+                      child: Text('SignUp?'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

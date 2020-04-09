@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "497783382792",
+    "firebase_url": "https://prearticle-book-store-obitors.firebaseio.com",
+    "project_id": "prearticle-book-store-obitors",
+    "storage_bucket": "prearticle-book-store-obitors.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497783382792:android:cbae17a86b75213f4fc2bd",
+        "android_client_info": {
+          "package_name": "com.obitors.prearticle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497783382792-91uuc0r7l53dl2ulj8q7143sru9baltk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwDsH1OIZaQX-B6ATBbispi-sUYGCRdYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497783382792-91uuc0r7l53dl2ulj8q7143sru9baltk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
