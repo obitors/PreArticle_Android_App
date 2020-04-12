@@ -9,7 +9,7 @@ import '';
 void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (context) => AuthNotifier(),
+          builder: (context) => AuthNotifier(), create: (BuildContext context) {  },
         ),
       ],
       child: PreArticle(),
