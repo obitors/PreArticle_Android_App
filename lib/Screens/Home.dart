@@ -14,7 +14,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int currentIndex;
   @override
+  void initState() {
+    super.initState();
+    currentIndex = 0;
+  }
+  void changePage(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
@@ -121,12 +131,12 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BubbleBottomBar(
         opacity: .2,
-        currentIndex: 0,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         elevation: 10,
         hasNotch: true,
         hasInk: true,
-        inkColor: Colors.black12, //optional, uses theme color if not specified
+        onTap: changePage,
+        //inkColor: Colors.black12, //optional, uses theme color if not specified
         items: <BubbleBottomBarItem> [
           BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.dashboard, color: Colors.black,), activeIcon: Icon(Icons.home, color: Color(0xff6e9bdf),), title: Text("Home")),
           BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.local_library, color: Colors.black,), activeIcon: Icon(Icons.local_library, color: Color(0xff6e9bdf),), title: Text("Library")),
