@@ -1,27 +1,28 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Movie {
   final String url;
   final String title;
-
   const Movie({this.url, this.title});
 }
 
 const movies = [
   const Movie(
-      url: 'https://i.ytimg.com/vi/YcHKrNMwWyQ/movieposter.jpg', title: 'Dorazvuuvvvvv'),
+      url: 'https://i.ytimg.com/vi/YcHKrNMwWyQ/movieposter.jpg',
+      title: 'Dorazvuuvvvvv'),
   const Movie(
       url:
-      'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
+          'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
       title: 'Jokernjinininibn'),
   const Movie(
       url:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRAog3B6UEzMDOhehRXmjQbV2qYGOHYMh3jGGwqL7zwnwRJ6YyD',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRAog3B6UEzMDOhehRXmjQbV2qYGOHYMh3jGGwqL7zwnwRJ6YyD',
       title: 'Predatorvghvgubvgu'),
   const Movie(
     url:
-    'https://images-na.ssl-images-amazon.com/images/I/719fSnntGgL._AC_SL1500_.jpg',
+        'https://images-na.ssl-images-amazon.com/images/I/719fSnntGgL._AC_SL1500_.jpg',
     title: 'Anabellebhbjhbjhb',
   ),
 ];
@@ -33,6 +34,16 @@ class CardSwipe extends StatefulWidget {
 
 class _CardSwipeState extends State<CardSwipe> {
 
+  final databaseReference = Firestore.instance;
+  void getData() {
+    databaseReference
+        .collection("Books")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
+    }
+    );
+  }
 
   final pageController = PageController(viewportFraction: .8);
   final ValueNotifier<double> _pageNotifier = ValueNotifier(0.0);
@@ -63,11 +74,11 @@ class _CardSwipeState extends State<CardSwipe> {
               controller: pageController,
               itemBuilder: (context, index) {
                 final lerp =
-                lerpDouble(0, 0, (index - _pageNotifier.value).abs());
+                    lerpDouble(0, 0, (index - _pageNotifier.value).abs());
                 double opacity =
-                lerpDouble(0.0, .3, (index - _pageNotifier.value).abs());
-                double heights =
-                lerpDouble(size.height / 2, size.height / 2.2, (index - _pageNotifier.value).abs());
+                    lerpDouble(0.0, .3, (index - _pageNotifier.value).abs());
+                double heights = lerpDouble(size.height / 2, size.height / 2.2,
+                    (index - _pageNotifier.value).abs());
                 if (opacity > 1.0) opacity = 1.0;
                 if (opacity < 0.0) opacity = 0.0;
                 return Transform.translate(
@@ -95,7 +106,10 @@ class _CardSwipeState extends State<CardSwipe> {
                                 flex: 3,
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 0.0, left: 20.0, right: 20.0, bottom: 20),
+                                      top: 0.0,
+                                      left: 20.0,
+                                      right: 20.0,
+                                      bottom: 20),
                                   child: ClipRRect(
                                     borderRadius: borderRadius,
                                     child: Image.network(
