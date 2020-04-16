@@ -33,18 +33,6 @@ class CardSwipe extends StatefulWidget {
 }
 
 class _CardSwipeState extends State<CardSwipe> {
-
-  final databaseReference = Firestore.instance;
-  void getData() {
-    databaseReference
-        .collection("Books")
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
-    }
-    );
-  }
-
   final pageController = PageController(viewportFraction: .8);
   final ValueNotifier<double> _pageNotifier = ValueNotifier(0.0);
 
@@ -65,61 +53,73 @@ class _CardSwipeState extends State<CardSwipe> {
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(30);
     final size = MediaQuery.of(context).size;
-
+    final databaseReference =
+        Firestore.instance.collection("Books").snapshots();
     return Scaffold(
-      body: Stack(
-        children: [
-          PageView.builder(
-              itemCount: movies.length,
-              controller: pageController,
-              itemBuilder: (context, index) {
-                final lerp =
-                    lerpDouble(0, 0, (index - _pageNotifier.value).abs());
-                double opacity =
-                    lerpDouble(0.0, .3, (index - _pageNotifier.value).abs());
-                double heights = lerpDouble(size.height / 2, size.height / 2.2,
-                    (index - _pageNotifier.value).abs());
-                if (opacity > 1.0) opacity = 1.0;
-                if (opacity < 0.0) opacity = 0.0;
-                return Transform.translate(
-                  offset: Offset(0.0, lerp * 50),
-                  child: Opacity(
-                    opacity: (1 - opacity),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Card(
-                        color: Colors.transparent,
-                        borderOnForeground: true,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: borderRadius,
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: SizedBox(
-                          height: heights,
-                          width: size.width,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 0.0,
-                                      left: 20.0,
-                                      right: 20.0,
-                                      bottom: 20),
-                                  child: ClipRRect(
-                                    borderRadius: borderRadius,
-                                    child: Image.network(
-                                      movies[index].url,
-                                      fit: BoxFit.cover,
+      body: StreamBuilder(
+        stream: Firestore.instance.collection("Books").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Stack(
+            children: [
+              PageView.builder(
+                  itemCount: snapshot.data.documents.length,
+                  //itemCount: snapshot.data,
+                  controller: pageController,
+                  itemBuilder: (context, index) {
+                    final lerp =
+                        lerpDouble(0, 0, (index - _pageNotifier.value).abs());
+                    double opacity = lerpDouble(
+                        0.0, .3, (index - _pageNotifier.value).abs());
+                    double heights = lerpDouble(size.height / 2,
+                        size.height / 2.2, (index - _pageNotifier.value).abs());
+                    if (opacity > 1.0) opacity = 1.0;
+                    if (opacity < 0.0) opacity = 0.0;
+                    return Transform.translate(
+                      offset: Offset(0.0, lerp * 50),
+                      child: Opacity(
+                        opacity: (1 - opacity),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Card(
+                            color: Colors.transparent,
+                            borderOnForeground: true,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: borderRadius,
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                            child: SizedBox(
+                              height: heights,
+                              width: size.width,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  /* RaisedButton(
+                                child: Text('Create Record'),
+                                onPressed: () {
+                                  getData();
+                                },
+                              ), */
+                                  Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 0.0,
+                                          left: 20.0,
+                                          right: 20.0,
+                                          bottom: 20),
+                                      child: ClipRRect(
+                                        borderRadius: borderRadius,
+                                        child: Image.network(
+                                          snapshot.data.documents[index]
+                                              ['Image'],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              /*Expanded(
+                                  /*Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(15.0),
                                   child: Text(
@@ -133,16 +133,41 @@ class _CardSwipeState extends State<CardSwipe> {
                                   ),
                                 ),
                               ),*/
-                            ],
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              }),
-        ],
+                    );
+                  }),
+            ],
+          );
+        },
       ),
     );
   }
+  /* final databaseReference = Firestore.instance;
+  void getData() {
+    databaseReference
+        .collection("Books")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
+    });
+  }
+
+  void createRecord() async {
+    await databaseReference.collection("Books").document("1").setData({
+      'title': 'Mastering Flutter',
+      'description': 'Programming Guide for Dart'
+    });
+
+    DocumentReference ref = await databaseReference.collection("Books").add({
+      'title': 'Flutter in Action',
+      'description': 'Complete Programming Guide to learn Flutter'
+    });
+    print(ref.documentID);
+  } */
+
 }
