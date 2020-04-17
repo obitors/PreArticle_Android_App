@@ -125,7 +125,7 @@ class _CardSwipeState extends State<CardSwipe> {
                                               builder: (BuildContext context) =>
                                                   BookDetails(),
                                                   settings: RouteSettings(
-                                            arguments: snapshot.data.documents[index]['Image'])
+                                            arguments: index)
                                             ),
                                           );
                                         },
