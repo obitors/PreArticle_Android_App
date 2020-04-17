@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:prearticle/Screens/Book_Details.dart';
 
 class Movie {
   final String url;
@@ -53,8 +54,6 @@ class _CardSwipeState extends State<CardSwipe> {
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(30);
     final size = MediaQuery.of(context).size;
-    final databaseReference =
-        Firestore.instance.collection("Books").snapshots();
     return Scaffold(
       body: StreamBuilder(
         stream: Firestore.instance.collection("Books").snapshots(),
@@ -109,14 +108,35 @@ class _CardSwipeState extends State<CardSwipe> {
                                           left: 20.0,
                                           right: 20.0,
                                           bottom: 20),
-                                      child: ClipRRect(
-                                        borderRadius: borderRadius,
-                                        child: Image.network(
-                                          snapshot.data.documents[index]
-                                              ['Image'],
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                      /* child: ClipRRect(
+                                          borderRadius: borderRadius,
+                                          child: Hero(
+                                            tag: 'bookCover',
+                                            child: Image.network(
+                                              snapshot.data.documents[index]
+                                                  ['Image'],
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )), */
+                                      child: Hero(tag: 'BookCover+$index', child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  BookDetails(),
+                                                  settings: RouteSettings(
+                                            arguments: snapshot.data.documents[index]['Image'])
+                                            ),
+                                          );
+                                        },
+                                        child: ClipRRect(
+                                            borderRadius: borderRadius,
+                                            child: Image.network(
+                                                snapshot.data.documents[index]
+                                                    ['Image'],
+                                                fit: BoxFit.cover,
+                                              ),),
+                                      ),)
                                     ),
                                   ),
                                   /*Expanded(

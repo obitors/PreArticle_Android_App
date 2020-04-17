@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BubbleBottomBar(
         opacity: .2,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        
         elevation: 10,
         hasNotch: true,
         hasInk: true,
