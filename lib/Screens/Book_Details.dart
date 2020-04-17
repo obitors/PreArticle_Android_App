@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:prearticle/Screens/Home.dart';
 
 class BookDetails extends StatefulWidget {
   BookDetails({Key key}) : super(key: key);
@@ -70,7 +71,7 @@ class _BookDetailsState extends State<BookDetails> {
                                 Hero(
                                   tag: 'BookCover0',
                                   child: Container(
-                                    height: 250,
+                                    height: 230,
                                     width: 180,
                                     decoration: BoxDecoration(
                                         color: Colors.blue,
@@ -97,11 +98,11 @@ class _BookDetailsState extends State<BookDetails> {
                                         width: 250,
                                         child: Text(
                                           snapshot.data.documents[index1]
-                                              ['Name'],
+                                              ['Name'].toUpperCase(),
                                           style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[700],
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,  
                                           ),
                                         ),
                                       ),
@@ -109,7 +110,10 @@ class _BookDetailsState extends State<BookDetails> {
                                         height: 10,
                                       ),
                                       Text(snapshot.data.documents[index1]
-                                          ['Author']),
+                                          ['Author'],
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                          ),),
                                       Wrap(
                                         children: <Widget>[],
                                       ),
@@ -120,6 +124,18 @@ class _BookDetailsState extends State<BookDetails> {
                               ],
                             ),
                           ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(),
+                          ),
+                          Center(
+                            child: RaisedButton(
+                              onPressed: null,
+                              color: Color(0xff6e9bdf),
+                              child: Text('Add to Library'),
+                              
+                              ),
+                          )
                         ],
                       ),
                     ),
