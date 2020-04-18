@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Screens/Home.dart';
@@ -11,7 +12,51 @@ class BookDetails extends StatefulWidget {
   _BookDetailsState createState() => _BookDetailsState();
 }
 
+
+
 class _BookDetailsState extends State<BookDetails> {
+
+
+
+final imgUrl = "https://unsplash.com/photos/iEJVyyevw-U/download?force=true";
+  bool downloading = false;
+  var progressString = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    downloadFile();
+  }
+
+  Future<void> downloadFile() async {
+    Dio dio = Dio();
+
+    try {
+      var dir = await getApplicationDocumentsDirectory();
+
+      await dio.download(imgUrl, "${dir.path}/myimage.jpg",
+          onProgress: (rec, total) {
+        print("Rec: $rec , Total: $total");
+
+        setState(() {
+          downloading = true;
+          progressString = ((rec / total) * 100).toStringAsFixed(0) + "%";
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    setState(() {
+      downloading = false;
+      progressString = "Completed";
+    });
+    print("Download completed");
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final int index1 = ModalRoute.of(context).settings.arguments;
