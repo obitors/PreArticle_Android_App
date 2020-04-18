@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:epub_kitty/epub_kitty.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prearticle/Widgets/Downloading_Popup.dart';
 
 class BookDetails extends StatefulWidget {
   BookDetails({Key key}) : super(key: key);
@@ -136,7 +140,12 @@ class _BookDetailsState extends State<BookDetails> {
                           ),
                           Center(
                             child: RaisedButton(
-                              onPressed:(null),
+                              onPressed:() =>startDownload(
+                                  context,
+                                  snapshot.data.documents[index1]['File'],
+                                  snapshot.data.documents[index1]['Name']
+                                      .replaceAll(" ", "_")
+                                      .replaceAll(r"\'", ""),),
                               color: Color(0xff6e9bdf),
                               child: Text('Add to Library'),
                               
@@ -156,6 +165,50 @@ class _BookDetailsState extends State<BookDetails> {
   }
 
 
+  Future startDownload(BuildContext context, String url, String filename) async {
 
+    PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.storage);
+    if(permission != PermissionStatus.granted){
+      await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+      downloading(context, url, filename);
+    }else{
+      downloading(context, url, filename);
+    }
+  }
 
+    downloading(BuildContext context, String url, String filename) async{
+      var dir = await getApplicationDocumentsDirectory();
+    Directory appDocDir = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationSupportDirectory();
+    if(Platform.isAndroid){
+      Directory(appDocDir.path.split("Android")[0]+"Android/data/com.obitors.prearticle").create();
+    }
+
+    String path = Platform.isIOS
+        ? appDocDir.path+"/$filename.epub"
+        : appDocDir.path.split("Android")[0]+"Android/data/com.obitors.prearticle/files/$filename.epub";
+
+    print(path);
+    File file = File(path);
+    if(!await file.exists()){
+      await file.create();
+    }else{
+      await file.delete();
+      await file.create();
+    }
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => DownloadAlert(
+        url: url,
+        path: path,
+      ),
+    ).then((v){
+      if(v != null){
+        EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
+        EpubKitty.open(path);
+      }
+    });
+  }
 }
