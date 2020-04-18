@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                         child: BookSeriesWidget(),
                       ),
                     ),
-                    Padding(
+                    Padding (
                       padding: EdgeInsets.only(top: 15, bottom: 15, left: 20),
                       child: Text(
                         'Recently Added',
