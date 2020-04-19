@@ -5,7 +5,10 @@ import 'package:epub_kitty/epub_kitty.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prearticle/Providers/Details_Provider.dart';
+
 import 'package:prearticle/Widgets/Downloading_Popup.dart';
+import 'package:provider/provider.dart';
 
 class BookDetails extends StatefulWidget {
   BookDetails({Key key}) : super(key: key);
@@ -14,12 +17,7 @@ class BookDetails extends StatefulWidget {
   _BookDetailsState createState() => _BookDetailsState();
 }
 
-
-
 class _BookDetailsState extends State<BookDetails> {
-
-
-
   @override
   Widget build(BuildContext context) {
     final int index1 = ModalRoute.of(context).settings.arguments;
@@ -107,23 +105,26 @@ class _BookDetailsState extends State<BookDetails> {
                                       SizedBox(
                                         width: 250,
                                         child: Text(
-                                          snapshot.data.documents[index1]
-                                              ['Name'].toUpperCase(),
+                                          snapshot
+                                              .data.documents[index1]['Name']
+                                              .toUpperCase(),
                                           style: TextStyle(
                                             color: Colors.grey[700],
                                             fontSize: 25,
-                                            fontWeight: FontWeight.bold,  
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Text(snapshot.data.documents[index1]
-                                          ['Author'],
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                          ),),
+                                      Text(
+                                        snapshot.data.documents[index1]
+                                            ['Author'],
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
                                       Wrap(
                                         children: <Widget>[],
                                       ),
@@ -140,16 +141,18 @@ class _BookDetailsState extends State<BookDetails> {
                           ),
                           Center(
                             child: RaisedButton(
-                              onPressed:() =>startDownload(
-                                  context,
-                                  snapshot.data.documents[index1]['File'],
-                                  snapshot.data.documents[index1]['Name']
-                                      .replaceAll(" ", "_")
-                                      .replaceAll(r"\'", ""),),
+                              onPressed: () => startDownload(
+                                context,
+                                snapshot.data.documents[index1]['File'],
+                                snapshot.data.documents[index1]['Name']
+                                    .replaceAll(" ", "_")
+                                    .replaceAll(r"\'", ""),
+                                snapshot.data.documents[index1]['Image'],
+                                index1,
+                              ),
                               color: Color(0xff6e9bdf),
                               child: Text('Add to Library'),
-                              
-                              ),
+                            ),
                           )
                         ],
                       ),
@@ -164,50 +167,95 @@ class _BookDetailsState extends State<BookDetails> {
     );
   }
 
-
-  Future startDownload(BuildContext context, String url, String filename) async {
-
-    PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.storage);
-    if(permission != PermissionStatus.granted){
+  Future startDownload(
+      BuildContext context, String url, String filename, String imageUrl, var index1) async {
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.storage);
+    if (permission != PermissionStatus.granted) {
       await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-      downloading(context, url, filename);
-    }else{
-      downloading(context, url, filename);
+      downloading(context, url, filename, imageUrl, index1);
+    } else {
+      downloading(context, url, filename, imageUrl, index1);
     }
   }
 
-    downloading(BuildContext context, String url, String filename) async{
-      var dir = await getApplicationDocumentsDirectory();
+  downloading(BuildContext context, String fileUrl, String filename, String imageUrl, var index1) async {
+
     Directory appDocDir = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationSupportDirectory();
-    if(Platform.isAndroid){
-      Directory(appDocDir.path.split("Android")[0]+"Android/data/com.obitors.prearticle").create();
+    if (Platform.isAndroid) {
+      Directory(appDocDir.path.split("Android")[0] +
+              "Android/data/com.obitors.prearticle")
+          .create();
     }
 
-    String path = Platform.isIOS
-        ? appDocDir.path+"/$filename.epub"
-        : appDocDir.path.split("Android")[0]+"Android/data/com.obitors.prearticle/files/$filename.epub";
+    String filepath = Platform.isIOS
+        ? appDocDir.path + "/$filename.epub"
+        : appDocDir.path.split("Android")[0] +
+            "Android/data/com.obitors.prearticle/files/$filename.epub";
+    
+    String imagepath = Platform.isIOS
+        ? appDocDir.path + "/$filename.jpg"
+        : appDocDir.path.split("Android")[0] +
+            "Android/data/com.obitors.prearticle/files/$filename.jpg";
 
-    print(path);
-    File file = File(path);
-    if(!await file.exists()){
-      await file.create();
-    }else{
-      await file.delete();
-      await file.create();
+    print(filepath);
+    print(imagepath);
+
+    File epubfile = File(filepath);
+    if (!await epubfile.exists()) {
+      await epubfile.create();
+    } else {
+      await epubfile.delete();
+      await epubfile.create();
     }
+
+    File imagefile = File(imagepath);
+    if (!await imagefile.exists()) {
+      await imagefile.create();
+    } else {
+      await imagefile.delete();
+      await imagefile.create();
+    }
+
+/*     showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => DownloadAlert(
+        url: imageUrl,
+        path: imagepath,
+      ),
+    ); */
+
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => DownloadAlert(
-        url: url,
-        path: path,
+        url: fileUrl,
+        path: filepath,
       ),
-    ).then((v){
-      if(v != null){
-        EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
-        EpubKitty.open(path);
+    ).then((v) {
+      if (v != null) {
+
+       final databaseReference = Firestore.instance;
+        databaseReference
+          .collection("Books")
+          .getDocuments()
+          .then((QuerySnapshot snapshot) {
+            Provider.of<DetailsProvider>(context, listen: false).addDownload(
+          {
+            "id": snapshot.documents[index1]['ID'],
+            "path": filepath,
+            //"image": "${entry.link[1].href}",
+            "size": v,
+            "name": snapshot.documents[index1]['Name'],
+            "author": snapshot.documents[index1]['Author'],
+          },
+        );
+        });
+        /* EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
+        EpubKitty.open(filepath); */
       }
     });
   }
