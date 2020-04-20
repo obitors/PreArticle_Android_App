@@ -1,34 +1,12 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Screens/Book_Details.dart';
 import 'package:prearticle/objects/Book_Data.dart';
+import 'package:http/http.dart' as http;
 
-class Movie {
-  final String url;
-  final String title;
-  const Movie({this.url, this.title});
-}
-
-const movies = [
-  const Movie(
-      url: 'https://i.ytimg.com/vi/YcHKrNMwWyQ/movieposter.jpg',
-      title: 'Dorazvuuvvvvv'),
-  const Movie(
-      url:
-          'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
-      title: 'Jokernjinininibn'),
-  const Movie(
-      url:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRAog3B6UEzMDOhehRXmjQbV2qYGOHYMh3jGGwqL7zwnwRJ6YyD',
-      title: 'Predatorvghvgubvgu'),
-  const Movie(
-    url:
-        'https://images-na.ssl-images-amazon.com/images/I/719fSnntGgL._AC_SL1500_.jpg',
-    title: 'Anabellebhbjhbjhb',
-  ),
-];
 
 class CardSwipe extends StatefulWidget {
   @override
@@ -38,12 +16,9 @@ class CardSwipe extends StatefulWidget {
 class _CardSwipeState extends State<CardSwipe> {
 
 
-    List<Book> _data = List<Book>();
-
-  get http => null;
-
+  List<Book> _data = List<Book>();
   Future<List<Book>> fetchNotes() async {
-    var url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/100Ways.json';
+    var url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/lib/Data/collection.json';
     var response = await http.get(url);
     var datas = List<Book>();
     if (response.statusCode == 200) {
@@ -89,7 +64,7 @@ class _CardSwipeState extends State<CardSwipe> {
       body: Stack(
             children: [
               PageView.builder(
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: _data.length,
                   //itemCount: snapshot.data,
                   controller: pageController,
                   itemBuilder: (context, index) {
@@ -153,17 +128,17 @@ class _CardSwipeState extends State<CardSwipe> {
                                               builder: (BuildContext context) =>
                                                   BookDetails(),
                                                   settings: RouteSettings(
-                                            arguments: index)
+                                            arguments: index+1)
                                             ),
                                           );
                                         },
                                         child: ClipRRect(
                                             borderRadius: borderRadius,
                                             child: Image.network(
-                                                snapshot.data.documents[index]
-                                                    ['Image'],
+                                                _data[index].imageurl,
                                                 fit: BoxFit.cover,
                                               ),),
+                                              
                                       ),)
                                     ),
                                   ),

@@ -4,11 +4,12 @@ import 'package:prearticle/Screens/Downloads.dart';
 import 'package:prearticle/Screens/Splash_Screen.dart';
 import 'package:prearticle/notifier/Firebase_Auth_Notifier.dart';
 import 'package:provider/provider.dart';
-import '';
+import 'Providers/Details_Provider.dart';
 
 
 void main() => runApp(MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => DetailsProvider()),
         ChangeNotifierProvider(
           builder: (context) => AuthNotifier(), create: (BuildContext context) {  },
         ),
@@ -26,7 +27,7 @@ class PreArticle extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xff6E9BDF),
       ),
-      home: Downloads(),
+      home: splash(),
     );
   }
 }

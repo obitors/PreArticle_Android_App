@@ -4,8 +4,8 @@ class Book {
   final String fileurl;
   final String imageurl;
   final List category;
-  final List collection;
-  final int pages;
+  final String collection;
+  final String pages;
 
   Book({this.name, this.author, this.fileurl, this.imageurl, this.category, this.collection, this.pages});
 
@@ -14,7 +14,7 @@ class Book {
       name: json['name'] as String,
       fileurl: json['file'] as String,
       imageurl: json['image'] as String,
-      collection: json['collection'],
+      collection: json['collection'] as String,
       author: json['author'] as String,
       pages: json['pages'],
       category: json['category'],

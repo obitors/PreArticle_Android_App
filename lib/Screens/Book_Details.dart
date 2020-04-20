@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:epub_kitty/epub_kitty.dart';
@@ -6,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:prearticle/Providers/Details_Provider.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:prearticle/Widgets/Downloading_Popup.dart';
+import 'package:prearticle/objects/Book_Data.dart';
 import 'package:provider/provider.dart';
 
 class BookDetails extends StatefulWidget {
@@ -167,8 +169,8 @@ class _BookDetailsState extends State<BookDetails> {
     );
   }
 
-  Future startDownload(
-      BuildContext context, String url, String filename, String imageUrl, var index1) async {
+  Future startDownload(BuildContext context, String url, String filename,
+      String imageUrl, var index1) async {
     PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.storage);
     if (permission != PermissionStatus.granted) {
@@ -179,8 +181,8 @@ class _BookDetailsState extends State<BookDetails> {
     }
   }
 
-  downloading(BuildContext context, String fileUrl, String filename, String imageUrl, var index1) async {
-
+  downloading(BuildContext context, String fileUrl, String filename,
+      String imageUrl, var index1) async {
     Directory appDocDir = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationSupportDirectory();
@@ -194,7 +196,7 @@ class _BookDetailsState extends State<BookDetails> {
         ? appDocDir.path + "/$filename.epub"
         : appDocDir.path.split("Android")[0] +
             "Android/data/com.obitors.prearticle/files/$filename.epub";
-    
+
     String imagepath = Platform.isIOS
         ? appDocDir.path + "/$filename.jpg"
         : appDocDir.path.split("Android")[0] +
@@ -237,17 +239,15 @@ class _BookDetailsState extends State<BookDetails> {
       ),
     ).then((v) {
       if (v != null) {
-
-       final databaseReference = Firestore.instance;
+        final databaseReference = Firestore.instance;
         databaseReference
-          .collection("Books")
+          .collection("Data")
           .getDocuments()
           .then((QuerySnapshot snapshot) {
             Provider.of<DetailsProvider>(context, listen: false).addDownload(
           {
             "id": snapshot.documents[index1]['ID'],
             "path": filepath,
-            //"image": "${entry.link[1].href}",
             "size": v,
             "name": snapshot.documents[index1]['Name'],
             "author": snapshot.documents[index1]['Author'],
@@ -255,8 +255,40 @@ class _BookDetailsState extends State<BookDetails> {
         );
         }
         );
-        /* EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
-        EpubKitty.open(filepath); */
+
+        /* List<Book> _data = List<Book>();
+        Future<List<Book>> fetchNotes() async {
+          var url =
+              'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/lib/Data/collection.json';
+          var response = await http.get(url);
+          var datas = List<Book>();
+          if (response.statusCode == 200) {
+            var notesJson = json.decode(response.body);
+            for (var noteJson in notesJson) {
+              datas.add(Book.fromJson(noteJson));
+            }
+            return datas;
+          } else {
+            return List<Book>();
+          }
+        }
+
+        fetchNotes().then((value) {
+          setState(() {
+            _data.addAll(value);
+          });
+        });
+
+        Provider.of<DetailsProvider>(context, listen: false).addDownload(
+          {
+            "id": _data[index1].name,
+            "path": filepath,
+            "size": v,
+            "name": _data[index1].name,
+            "author": _data[index1].author,
+          },
+        ); */
+
       }
     });
   }
