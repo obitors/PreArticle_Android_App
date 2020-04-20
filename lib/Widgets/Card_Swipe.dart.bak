@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Screens/Book_Details.dart';
-import 'package:prearticle/objects/Book_Data.dart';
 
 class Movie {
   final String url;
@@ -36,29 +34,6 @@ class CardSwipe extends StatefulWidget {
 }
 
 class _CardSwipeState extends State<CardSwipe> {
-
-
-    List<Book> _data = List<Book>();
-
-  get http => null;
-
-  Future<List<Book>> fetchNotes() async {
-    var url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/Data/100Ways.json';
-    var response = await http.get(url);
-    var datas = List<Book>();
-    if (response.statusCode == 200) {
-      var notesJson = json.decode(response.body);
-      for (var noteJson in notesJson) {
-        datas.add(Book.fromJson(noteJson));
-      }
-      return datas;
-    } else {
-      return List<Book>();
-    }
-  }
-
-
-
   final pageController = PageController(viewportFraction: .8);
   final ValueNotifier<double> _pageNotifier = ValueNotifier(0.0);
 
@@ -67,16 +42,10 @@ class _CardSwipeState extends State<CardSwipe> {
     setState(() {});
   }
 
-
+  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       pageController.addListener(_listener);
-    });
-    this.widget;
-    fetchNotes().then((value) {
-      setState(() {
-        _data.addAll(value);
-      });
     });
     super.initState();
   }
@@ -86,7 +55,10 @@ class _CardSwipeState extends State<CardSwipe> {
     final borderRadius = BorderRadius.circular(30);
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
+      body: StreamBuilder(
+        stream: Firestore.instance.collection("Books").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Stack(
             children: [
               PageView.builder(
                   itemCount: snapshot.data.documents.length,
@@ -190,7 +162,9 @@ class _CardSwipeState extends State<CardSwipe> {
                     );
                   }),
             ],
-          ),
+          );
+        },
+      ),
     );
   }
   /* final databaseReference = Firestore.instance;

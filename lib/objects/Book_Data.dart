@@ -1,21 +1,23 @@
 class Book {
   final String name;
   final String author;
-  final String file;
-  final String image;
+  final String fileurl;
+  final String imageurl;
   final List category;
   final List collection;
+  final int pages;
 
-  Book({this.name, this.author, this.file, this.image, this.category, this.collection});
+  Book({this.name, this.author, this.fileurl, this.imageurl, this.category, this.collection, this.pages});
 
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
       name: json['name'] as String,
-      author: json['author'] as String,
-      file: json['file'] as String,
-      image: json['image'] as String,
-      category: json['category'],
+      fileurl: json['file'] as String,
+      imageurl: json['image'] as String,
       collection: json['collection'],
+      author: json['author'] as String,
+      pages: json['pages'],
+      category: json['category'],
     );
   }
 }
