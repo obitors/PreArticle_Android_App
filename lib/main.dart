@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prearticle/Screens/Downloads.dart';
 import 'package:prearticle/Screens/Splash_Screen.dart';
 import 'package:prearticle/notifier/Firebase_Auth_Notifier.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class PreArticle extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xff6E9BDF),
       ),
-      home: splash(),
+      home: Downloads(),
     );
   }
 }

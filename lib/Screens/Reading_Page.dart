@@ -46,15 +46,15 @@ class _ReadingPageState extends State<ReadingPage> {
       body: Column(
         children: <Widget>[
           chapter_Name(name: data.name),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
+          Expanded (
+            child: Container (
+              decoration: BoxDecoration (
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25)),
               ),
-              child: chapter_data(
+              child: chapter_data (
                 link: data.data,
               ),
             ),
@@ -64,4 +64,3 @@ class _ReadingPageState extends State<ReadingPage> {
     );
   }
 }
-

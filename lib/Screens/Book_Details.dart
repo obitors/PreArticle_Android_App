@@ -253,7 +253,8 @@ class _BookDetailsState extends State<BookDetails> {
             "author": snapshot.documents[index1]['Author'],
           },
         );
-        });
+        }
+        );
         /* EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
         EpubKitty.open(filepath); */
       }
