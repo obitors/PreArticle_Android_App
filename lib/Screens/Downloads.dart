@@ -34,10 +34,7 @@ class _DownloadsState extends State<Downloads> {
     getDownloads();
   }
 
-
-
-  @override
-  
+  @override  
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(

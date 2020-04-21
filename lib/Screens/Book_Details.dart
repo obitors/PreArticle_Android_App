@@ -142,15 +142,18 @@ class _BookDetailsState extends State<BookDetails> {
                             child: Container(),
                           ),
                           Center(
+                            
                             child: RaisedButton(
                               onPressed: () => startDownload(
                                 context,
+                                
                                 snapshot.data.documents[index1]['File'],
                                 snapshot.data.documents[index1]['Name']
                                     .replaceAll(" ", "_")
                                     .replaceAll(r"\'", ""),
                                 snapshot.data.documents[index1]['Image'],
                                 index1,
+                                
                               ),
                               color: Color(0xff6e9bdf),
                               child: Text('Add to Library'),
@@ -239,27 +242,49 @@ class _BookDetailsState extends State<BookDetails> {
       ),
     ).then((v) {
       if (v != null) {
-        final databaseReference = Firestore.instance;
+        /* final databaseReference = Firestore.instance;
+        var doc = Firestore.instance.collection("Books").snapshots();
         databaseReference
-          .collection("Data")
-          .getDocuments()
-          .then((QuerySnapshot snapshot) {
-            Provider.of<DetailsProvider>(context, listen: false).addDownload(
-          {
-            "id": snapshot.documents[index1]['ID'],
-            "path": filepath,
-            "size": v,
-            "name": snapshot.documents[index1]['Name'],
-            "author": snapshot.documents[index1]['Author'],
+            .collection("Data")
+            .getDocuments()
+            .then((QuerySnapshot snapshot) {
+          Provider.of<DetailsProvider>(context, listen: false).addDownload(
+            {
+              "id": snapshot.documents[index1]['ID'],
+              "path": filepath,
+              "size": v,
+              "name": snapshot.documents[index1]['Name'],
+              "author": snapshot.documents[index1]['Author'],
+            },
+          );
+        }); */
+
+
+
+        final databaseReference = Firestore.instance;
+        var doc = Firestore.instance.collection("Books").snapshots();
+        StreamBuilder (
+          stream: Firestore.instance.collection("Books").snapshots() ,
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            return Container (
+              child: Provider.of<DetailsProvider>(context, listen: false).addDownload(
+            {
+              "id": snapshot.data.documents[index1]['ID'],
+              "path": filepath,
+              "size": v,
+              "name": snapshot.data.documents[index1]['Name'],
+              "author": snapshot.data.documents[index1]['Author'],
+            },
+          ),
+          );
           },
         );
-        }
-        );
+
+
 
         /* List<Book> _data = List<Book>();
         Future<List<Book>> fetchNotes() async {
-          var url =
-              'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/lib/Data/collection.json';
+          var url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/lib/Data/collection.json';
           var response = await http.get(url);
           var datas = List<Book>();
           if (response.statusCode == 200) {
@@ -279,6 +304,8 @@ class _BookDetailsState extends State<BookDetails> {
           });
         });
 
+        print(_data[index1].author);
+
         Provider.of<DetailsProvider>(context, listen: false).addDownload(
           {
             "id": _data[index1].name,
@@ -288,7 +315,6 @@ class _BookDetailsState extends State<BookDetails> {
             "author": _data[index1].author,
           },
         ); */
-
       }
     });
   }
