@@ -17,7 +17,7 @@ class DetailsProvider extends ChangeNotifier {
     addDownload(Map body) async {
     await dlDB.add(body);
     print('Kucch to hua abhi abhi');
-    checkDownload(body["id"]);
+    checkDownload(body['id']);
   }
 
     checkDownload(String id) async {
@@ -27,11 +27,11 @@ class DetailsProvider extends ChangeNotifier {
     } else {
       setDownloaded(false);
     }
-    print(setDownloaded);
   }
 
   void setDownloaded(value) {
     downloaded = value;
     notifyListeners();
+    print(setDownloaded);
   }
 }
