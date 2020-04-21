@@ -259,11 +259,17 @@ class _BookDetailsState extends State<BookDetails> {
           );
         }); */
 
+        Provider.of<DetailsProvider>(context, listen: false).addDownload(
+            {
+              "id": filename,
+              "path": filepath,
+              "size": v,
+              "name": filename,
+              "author": filename,
+            },
+          );
 
-
-        final databaseReference = Firestore.instance;
-        var doc = Firestore.instance.collection("Books").snapshots();
-        StreamBuilder (
+        /* StreamBuilder (
           stream: Firestore.instance.collection("Books").snapshots() ,
           builder: (BuildContext context, AsyncSnapshot snapshot){
             return Container (
@@ -278,7 +284,7 @@ class _BookDetailsState extends State<BookDetails> {
           ),
           );
           },
-        );
+        ); */
 
 
 

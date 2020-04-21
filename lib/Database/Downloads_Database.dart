@@ -18,7 +18,7 @@ class DownloadsDB{
     db.tidy();
     await db.close();
   }
-
+  
   Future<int> remove(Map item) async {
     final db = ObjectDB(await getPath());
     db.open();
