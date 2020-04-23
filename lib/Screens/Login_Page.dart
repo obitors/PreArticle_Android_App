@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Screens/Home.dart';
+import 'package:prearticle/Screens/Navigation_Home.dart';
 import 'package:prearticle/objects/Auth_User.dart';
 
 class loginPage extends StatefulWidget {
@@ -205,7 +206,7 @@ class _loginPageState extends State<loginPage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage(
+                        builder: (BuildContext context) => NavigationHome(
                               onPressed: () {},
                             )),
                   );

@@ -44,6 +44,8 @@ dependencies:
   objectdb: ^1.0.7+1
   permission_handler: ^4.2.0+hotfix.1
   permission: ^0.1.7
+  epub: ^2.1.0
+  bottom_navy_bar: ^5.4.0
   
 
 dev_dependencies:

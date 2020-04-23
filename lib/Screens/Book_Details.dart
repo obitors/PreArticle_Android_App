@@ -207,6 +207,8 @@ class _BookDetailsState extends State<BookDetails> {
 
     print(filepath);
     print(imagepath);
+    print(imageUrl);
+
 
     File epubfile = File(filepath);
     if (!await epubfile.exists()) {
@@ -224,21 +226,20 @@ class _BookDetailsState extends State<BookDetails> {
       await imagefile.create();
     }
 
-/*     showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => DownloadAlert(
-        url: imageUrl,
-        path: imagepath,
-      ),
-    ); */
-
-    showDialog(
+     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => DownloadAlert(
         url: fileUrl,
         path: filepath,
+      ),
+    ).then((value) => showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) =>
+        DownloadAlert (
+        url: imageUrl,
+        path: imagepath,
       ),
     ).then((v) {
       if (v != null) {
@@ -266,6 +267,7 @@ class _BookDetailsState extends State<BookDetails> {
               "size": v,
               "name": filename,
               "author": filename,
+              "image": imagepath,
             },
           );
 
@@ -322,6 +324,12 @@ class _BookDetailsState extends State<BookDetails> {
           },
         ); */
       }
-    });
+    })
+    
+    
+    );
+
+    
+      
   }
 }

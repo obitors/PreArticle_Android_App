@@ -32,6 +32,6 @@ class DetailsProvider extends ChangeNotifier {
   void setDownloaded(value) {
     downloaded = value;
     notifyListeners();
-    print(setDownloaded);
+    print(downloaded);
   }
 }
