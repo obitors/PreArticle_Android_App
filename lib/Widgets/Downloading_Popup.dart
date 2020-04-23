@@ -50,12 +50,20 @@ class _DownloadAlertState extends State<DownloadAlert> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: WillPopScope(
       onWillPop: ()=>Future.value(false),
       child: Container(
         child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
+          padding: EdgeInsets.only(left:20, right: 20, top: 100, bottom: 300),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+            child: Padding(padding: EdgeInsets.all(50),
+              child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -63,7 +71,8 @@ class _DownloadAlertState extends State<DownloadAlert> {
               Text(
                 "Downloading...",
                 style: TextStyle(
-                  fontSize: 15,
+                  color: Colors.grey[800],
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 2,
@@ -113,8 +122,11 @@ class _DownloadAlertState extends State<DownloadAlert> {
               ),
             ],
           ),
+            ),
+          ),
         ),
       ),
+    ),
     );
   }
 }
