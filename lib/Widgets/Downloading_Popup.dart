@@ -58,7 +58,7 @@ class _DownloadAlertState extends State<DownloadAlert> {
       onWillPop: ()=>Future.value(false),
       child: Container(
         child: Padding(
-          padding: EdgeInsets.only(left:20, right: 20, top: 100, bottom: 300),
+          padding: EdgeInsets.only(left:20, right: 20, top: 300, bottom: 300),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -73,9 +73,9 @@ class _DownloadAlertState extends State<DownloadAlert> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SpinKitChasingDots(color: Color(0xff6e9bdf)),
+                  const SpinKitChasingDots(color: Color(0xff6e9bdf), size: 100,),
                   SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
                 Text(
                 "Downloading",
