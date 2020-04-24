@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:prearticle/Widgets/Downloading_Popup.dart';
 import 'package:prearticle/objects/Book_Data.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class BookDetails extends StatefulWidget {
   BookDetails({Key key}) : super(key: key);
@@ -21,6 +22,48 @@ class BookDetails extends StatefulWidget {
 }
 
 class _BookDetailsState extends State<BookDetails> {
+
+
+  
+
+  var db = DownloadsDB();
+  List dls = List();
+  
+  getDownloads() async {
+
+    List l = await db.listAll();
+    setState(() {
+      dls.addAll(l);
+    });
+  }
+
+  checkDownload(String name) {
+    if (dls.isEmpty)
+    {
+      return null;
+    }
+    else {
+    for (int i=0; i<= dls.length; i++)
+    {
+      Map dl = dls[i];
+      if (dl['name']==name)
+      {
+        return dl['path'];
+      }
+      else {
+        return null;
+      }
+    }
+    }
+    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDownloads();
+  }
+
   Future startDownload(BuildContext context, String url, String filename,
       String imageUrl, var index1) async {
     PermissionStatus permission = await PermissionHandler()
@@ -172,45 +215,10 @@ class _BookDetailsState extends State<BookDetails> {
         }));
   }
 
-  bool done = true;
-  var db = DownloadsDB();
-  /* static final uuid = Uuid(); */
-
-  List dls = List();
-  getDownloads() async {
-    List l = await db.listAll();
-    setState(() {
-      dls.addAll(l);
-    });
-  }
-
-  checkDownload(String name) {
-    for (int i=0; i<= dls.length; i++)
-    {
-      Map dl = dls[i];
-      if (dl['name']==name)
-      {
-        return dl['path'];
-      }
-      else {
-        return null;
-      }
-    }
-  }
-
-  
-  @override
-  void initState() {
-    super.initState();
-    getDownloads();
-  }
-
   @override
   Widget build(BuildContext context) {
     final int index1 = ModalRoute.of(context).settings.arguments;
-    return Consumer<DetailsProvider>(
-      builder: (BuildContext context, DetailsProvider detailsProvider, Widget child) {
-        return Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xff6e9bdf),
       appBar: AppBar(
         leading: Icon(Icons.menu),
@@ -233,10 +241,9 @@ class _BookDetailsState extends State<BookDetails> {
         elevation: 0,
       ),
       body: StreamBuilder(
-        
         stream: Firestore.instance.collection("Books").snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot,) {
-          return Container(
+          return snapshot.hasData? Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -385,7 +392,7 @@ class _BookDetailsState extends State<BookDetails> {
                                 onPressed: (){
                                   String path = checkDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
                                     .replaceAll(r"\'", ""));
-                                      EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
+                                      EpubKitty.setConfig("Book", "#6e9bdf","vertical",true);
                                       EpubKitty.open(path);
                                 },
                                   child: Text(
@@ -394,7 +401,7 @@ class _BookDetailsState extends State<BookDetails> {
                                   color: Colors.white,
                                 ),
                                 ),
-                                ) :
+                                ) : 
                                     
                                     
                                     /* detailsProvider.downloaded
@@ -444,11 +451,12 @@ class _BookDetailsState extends State<BookDetails> {
                 ),
               ],
             ),
+          ):
+          Center(
+            child: const SpinKitChasingDots(color: Color(0xff6e9bdf), size: 100,),
           );
         },
       ),
-    );
-      },
     );
   }
 }

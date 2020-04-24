@@ -46,6 +46,7 @@ dependencies:
   permission: ^0.1.7
   epub: ^2.1.0
   flutter_spinkit: "^4.1.2"
+  rflutter_alert: ^1.0.3
   
 
 dev_dependencies:

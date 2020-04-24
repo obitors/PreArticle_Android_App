@@ -52,7 +52,6 @@ class _DownloadsState extends State<Downloads> {
 
   @override
   Widget build(BuildContext context,) {
-    int pageIndex = 1;
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
