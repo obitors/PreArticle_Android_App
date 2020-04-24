@@ -45,7 +45,7 @@ dependencies:
   permission_handler: ^4.2.0+hotfix.1
   permission: ^0.1.7
   epub: ^2.1.0
-  bottom_navy_bar: ^5.4.0
+  flutter_spinkit: "^4.1.2"
   
 
 dev_dependencies:

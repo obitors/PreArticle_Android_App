@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Providers/App_Provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class DownloadAlert extends StatefulWidget {
   final String url;
   final String path;
-
 
   DownloadAlert({
     Key key,
@@ -17,7 +17,9 @@ class DownloadAlert extends StatefulWidget {
   _DownloadAlertState createState() => _DownloadAlertState();
 }
 
+
 class _DownloadAlertState extends State<DownloadAlert> {
+  
 
   Dio dio = new Dio();
   int received = 0;
@@ -62,24 +64,33 @@ class _DownloadAlertState extends State<DownloadAlert> {
               borderRadius: BorderRadius.circular(20),
           color: Colors.white,
         ),
-            child: Padding(padding: EdgeInsets.all(50),
+            child: Padding(padding: EdgeInsets.all(30),
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                "Downloading...",
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const SpinKitChasingDots(color: Color(0xff6e9bdf)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                Text(
+                "Downloading",
                 style: TextStyle(
-                  color: Colors.grey[800],
+                  color: Color(0xff6e9bdf),
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
+                ],
+              ),
               SizedBox(
-                height: 20,
+                height: 30,
               ),
               Container(
                 height: 5,

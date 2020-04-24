@@ -127,8 +127,21 @@ class _BookDetailsState extends State<BookDetails> {
                                           color: Colors.grey[600],
                                         ),
                                       ),
-                                      Wrap(
-                                        children: <Widget>[],
+                                      Row(
+                                        children: <Widget>[
+                                          ListView.builder(
+                                            itemCount: 3,
+                                            itemBuilder: (BuildContext context, int index) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color: Color(0xff6e9bdf),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              height: 10,
+                                            );
+                                           },
+                                          ),
+                                        ],
                                       ),
                                       Text('121 pages')
                                     ],
