@@ -26,6 +26,7 @@ class DetailsProvider extends ChangeNotifier {
       setDownloaded(true);
     } else {
       setDownloaded(false);
+      return null;
     }
   }
 
@@ -34,4 +35,16 @@ class DetailsProvider extends ChangeNotifier {
     notifyListeners();
     print(downloaded);
   }
+
+  Future<List> getDownload(String id) async{
+    if (dlDB.check({"name": id}) != null) {
+    List c = await dlDB.check({"name": id});
+    return c;
+    }
+    else {
+      return null;
+    }
+  }
+
 }
+

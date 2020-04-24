@@ -6,6 +6,7 @@ import 'package:epub_kitty/epub_kitty.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prearticle/Database/Downloads_Database.dart';
 import 'package:prearticle/Providers/Details_Provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:prearticle/Widgets/Downloading_Popup.dart';
@@ -171,10 +172,45 @@ class _BookDetailsState extends State<BookDetails> {
         }));
   }
 
+  bool done = true;
+  var db = DownloadsDB();
+  /* static final uuid = Uuid(); */
+
+  List dls = List();
+  getDownloads() async {
+    List l = await db.listAll();
+    setState(() {
+      dls.addAll(l);
+    });
+  }
+
+  checkDownload(String name) {
+    for (int i=0; i<= dls.length; i++)
+    {
+      Map dl = dls[i];
+      if (dl['name']==name)
+      {
+        return dl['path'];
+      }
+      else {
+        return null;
+      }
+    }
+  }
+
+  
+  @override
+  void initState() {
+    super.initState();
+    getDownloads();
+  }
+
   @override
   Widget build(BuildContext context) {
     final int index1 = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
+    return Consumer<DetailsProvider>(
+      builder: (BuildContext context, DetailsProvider detailsProvider, Widget child) {
+        return Scaffold(
       backgroundColor: Color(0xff6e9bdf),
       appBar: AppBar(
         leading: Icon(Icons.menu),
@@ -197,8 +233,9 @@ class _BookDetailsState extends State<BookDetails> {
         elevation: 0,
       ),
       body: StreamBuilder(
+        
         stream: Firestore.instance.collection("Books").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context, AsyncSnapshot snapshot,) {
           return Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -231,7 +268,7 @@ class _BookDetailsState extends State<BookDetails> {
                               children: <Widget>[
                                 Hero(
                                   tag: 'BookCover0',
-                                  child: Container(
+                                  child: Container (
                                     height: 230,
                                     width: 180,
                                     decoration: BoxDecoration(
@@ -341,7 +378,43 @@ class _BookDetailsState extends State<BookDetails> {
                                 color: Color(0xff6e9bdf),
                                 borderRadius: BorderRadius.circular(50),
                               ),
-                              child: Center(child: RaisedButton(
+                              
+                              child: checkDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
+                                    .replaceAll(r"\'", "")) != null ?
+                                    FlatButton(
+                                onPressed: (){
+                                  String path = checkDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
+                                    .replaceAll(r"\'", ""));
+                                      EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
+                                      EpubKitty.open(path);
+                                },
+                                  child: Text(
+                                  "Read Book",
+                                  style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                                ),
+                                ) :
+                                    
+                                    
+                                    /* detailsProvider.downloaded
+                                  ?  FlatButton(
+                                onPressed: (){
+                                  detailsProvider.getDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
+                                    .replaceAll(r"\'", "")).then((c){
+                                    if(c.isNotEmpty){
+                                      Map dl = c[0];
+                                      String path = dl['path'];
+                                      EpubKitty.setConfig("androidBook", "#06d6a7","vertical",true);
+                                      EpubKitty.open(path);
+                                    }
+                                  });
+                                },
+                                child: Text(
+                                  "Read Book",
+                                ),
+                              ): */
+                              Center(child: RaisedButton(
                                 elevation: 0,
                               onPressed: () => startDownload(
                                 context,
@@ -374,6 +447,8 @@ class _BookDetailsState extends State<BookDetails> {
           );
         },
       ),
+    );
+      },
     );
   }
 }
