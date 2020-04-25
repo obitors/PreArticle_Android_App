@@ -22,15 +22,10 @@ class BookDetails extends StatefulWidget {
 }
 
 class _BookDetailsState extends State<BookDetails> {
-
-
-  
-
   var db = DownloadsDB();
   List dls = List();
-  
-  getDownloads() async {
 
+  getDownloads() async {
     List l = await db.listAll();
     setState(() {
       dls.addAll(l);
@@ -38,24 +33,18 @@ class _BookDetailsState extends State<BookDetails> {
   }
 
   checkDownload(String name) {
-    if (dls.isEmpty)
-    {
+    if (dls.isEmpty) {
       return null;
-    }
-    else {
-    for (int i=0; i<= dls.length; i++)
-    {
-      Map dl = dls[i];
-      if (dl['name']==name)
-      {
-        return dl['path'];
-      }
-      else {
-        return null;
+    } else {
+      for (int i = 0; i <= dls.length; i++) {
+        Map dl = dls[i];
+        if (dl['name'] == name) {
+          return dl['path'];
+        } else {
+          return null;
+        }
       }
     }
-    }
-    
   }
 
   @override
@@ -242,169 +231,291 @@ class _BookDetailsState extends State<BookDetails> {
       ),
       body: StreamBuilder(
         stream: Firestore.instance.collection("Books").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot snapshot,) {
-          return snapshot.hasData? Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 20,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot snapshot,
+        ) {
+          return snapshot.hasData
+              ? Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25),
+                                topRight: Radius.circular(25)),
+                            color: Colors.grey[100],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 0, right: 0, top: 20),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Hero(
-                                  tag: 'BookCover0',
-                                  child: Container (
-                                    height: 230,
-                                    width: 180,
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        snapshot.data.documents[index1]
-                                            ['Image'],
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
+                                SizedBox(
+                                  height: 20,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  padding: EdgeInsets.only(left: 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      SizedBox(
-                                        width: 250,
-                                        child: Text(
-                                          snapshot
-                                              .data.documents[index1]['Name']
-                                              .toUpperCase(),
-                                          style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
+                                      Hero(
+                                        tag: 'BookCover0',
+                                        child: Container(
+                                          height: 270,
+                                          width: 220,
+                                          decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              snapshot.data.documents[index1]
+                                                  ['Image'],
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        snapshot.data.documents[index1]
-                                            ['Author'],
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 100,
-                                        width: 250,
-                                        child: ListView.builder(
-                                          itemCount: snapshot
-                                              .data
-                                              .documents[index1]['Category']
-                                              .length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(top: 10, right: 10),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0x996e9bdf),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 20, right: 20),
-                                                      child: Center(
-                                                        child: Text(
-                                                          snapshot.data.documents[
-                                                                      index1]
-                                                                  ['Category']
-                                                              [index],
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    height: 30,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      Text('121 pages')
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(),
-                          ),
-                          Center(
-                            child: Container(
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Color(0xff6e9bdf),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              
-                              child: checkDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
-                                    .replaceAll(r"\'", "")) != null ?
-                                    FlatButton(
-                                onPressed: (){
-                                  String path = checkDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
-                                    .replaceAll(r"\'", ""));
-                                      EpubKitty.setConfig("Book", "#6e9bdf","vertical",true);
-                                      EpubKitty.open(path);
-                                },
-                                  child: Text(
-                                  "Read Book",
-                                  style: TextStyle(
-                                  color: Colors.white,
+                                SizedBox(
+                                  height: 20,
                                 ),
-                                ),
-                                ) : 
-                                    
-                                    
-                                    /* detailsProvider.downloaded
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(30),
+                                          topRight: Radius.circular(30)),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 30,
+                                        right: 30,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 30,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 0, right: 0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      width: 300,
+                                                      child: Text(
+                                                        snapshot.data.documents[
+                                                            index1]['Name'],
+                                                        /* .toUpperCase(), */
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[700],
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 50,
+                                                      width: 50,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        color:
+                                                            Color(0xff6e9bdf),
+                                                      ),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.bookmark,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  snapshot.data
+                                                          .documents[index1]
+                                                      ['Author'],
+                                                  style: TextStyle(
+                                                    color: Colors.grey[600],
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 40,
+                                                  width: double.infinity,
+                                                  child: ListView.builder(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount: snapshot
+                                                        .data
+                                                        .documents[index1]
+                                                            ['Category']
+                                                        .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 10,
+                                                                right: 10),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Color(
+                                                                    0x996e9bdf),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15),
+                                                              ),
+                                                              child: Padding(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            20,
+                                                                        right:
+                                                                            20),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    snapshot.data.documents[index1]
+                                                                            [
+                                                                            'Category']
+                                                                        [index],
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              height: 30,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            'Desription',
+                                            style: TextStyle(
+                                              color: Color(0xff6e9bdf),
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 30,
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: SingleChildScrollView(
+                                              child: Text(
+                                                snapshot.data.documents[index1]
+                                                    ['Description'],
+                                                style: TextStyle(
+                                                  color: Colors.grey[500],
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Expanded(flex: 0, child: Container()),
+                                          Center(
+                                              child: Container(
+                                            width: 200,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff6e9bdf),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            child: checkDownload(snapshot
+                                                        .data
+                                                        .documents[index1]
+                                                            ['Name']
+                                                        .replaceAll(" ", "_")
+                                                        .replaceAll(
+                                                            r"\'", "")) !=
+                                                    null
+                                                ? FlatButton(
+                                                    onPressed: () {
+                                                      String path =
+                                                          checkDownload(snapshot
+                                                              .data
+                                                              .documents[index1]
+                                                                  ['Name']
+                                                              .replaceAll(
+                                                                  " ", "_")
+                                                              .replaceAll(
+                                                                  r"\'", ""));
+                                                      EpubKitty.setConfig(
+                                                          "Book",
+                                                          "#6e9bdf",
+                                                          "vertical",
+                                                          true);
+                                                      EpubKitty.open(path);
+                                                    },
+                                                    child: Text(
+                                                      "Read Book",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                :
+                                                /* detailsProvider.downloaded
                                   ?  FlatButton(
                                 onPressed: (){
                                   detailsProvider.getDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
@@ -421,40 +532,58 @@ class _BookDetailsState extends State<BookDetails> {
                                   "Read Book",
                                 ),
                               ): */
-                              Center(child: RaisedButton(
-                                elevation: 0,
-                              onPressed: () => startDownload(
-                                context,
-                                snapshot.data.documents[index1]['File'],
-                                snapshot.data.documents[index1]['Name']
-                                    .replaceAll(" ", "_")
-                                    .replaceAll(r"\'", ""),
-                                snapshot.data.documents[index1]['Image'],
-                                index1,
-                              ),
-                              color: Color(0xff6e9bdf),
-                              child: Text('Add to Library',
-                                style: TextStyle(
-                                  color: Colors.white,
+                                                Center(
+                                                    child: RaisedButton(
+                                                      elevation: 0,
+                                                      onPressed: () =>
+                                                          startDownload(
+                                                        context,
+                                                        snapshot.data.documents[
+                                                            index1]['File'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index1]
+                                                                ['Name']
+                                                            .replaceAll(
+                                                                " ", "_")
+                                                            .replaceAll(
+                                                                r"\'", ""),
+                                                        snapshot.data.documents[
+                                                            index1]['Image'],
+                                                        index1,
+                                                      ),
+                                                      color: Color(0xff6e9bdf),
+                                                      child: Text(
+                                                        'Add to Library',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                          )),
+                                          SizedBox(
+                                            height: 30,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),),
-                            )
+                              ],
+                            ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ):
-          Center(
-            child: const SpinKitChasingDots(color: Color(0xff6e9bdf), size: 100,),
-          );
+                )
+              : Center(
+                  child: const SpinKitChasingDots(
+                    color: Color(0xff6e9bdf),
+                    size: 100,
+                  ),
+                );
         },
       ),
     );
