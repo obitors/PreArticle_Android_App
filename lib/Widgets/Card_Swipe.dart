@@ -61,10 +61,14 @@ class _CardSwipeState extends State<CardSwipe> {
     final borderRadius = BorderRadius.circular(30);
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
+      resizeToAvoidBottomInset: false,
+      body: StreamBuilder(
+        stream: Firestore.instance.collection("Books").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return snapshot.hasData? Stack(
             children: [
               PageView.builder(
-                  itemCount: _data.length,
+                  itemCount: snapshot.data.documents.length,
                   //itemCount: snapshot.data,
                   controller: pageController,
                   itemBuilder: (context, index) {
@@ -128,17 +132,17 @@ class _CardSwipeState extends State<CardSwipe> {
                                               builder: (BuildContext context) =>
                                                   BookDetails(),
                                                   settings: RouteSettings(
-                                            arguments: index+1)
+                                            arguments: index)
                                             ),
                                           );
                                         },
                                         child: ClipRRect(
                                             borderRadius: borderRadius,
                                             child: Image.network(
-                                                _data[index].imageurl,
+                                                snapshot.data.documents[index]
+                                                    ['Image'],
                                                 fit: BoxFit.cover,
                                               ),),
-                                              
                                       ),)
                                     ),
                                   ),
@@ -165,7 +169,10 @@ class _CardSwipeState extends State<CardSwipe> {
                     );
                   }),
             ],
-          ),
+          ):
+          Container();
+        },
+      ),
     );
   }
   /* final databaseReference = Firestore.instance;

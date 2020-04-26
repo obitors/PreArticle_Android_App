@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prearticle/Screens/Downloads.dart';
+import 'package:prearticle/Screens/Search_Bar.dart';
 import 'package:prearticle/Screens/Splash_Screen.dart';
 import 'package:prearticle/Screens/Website.dart';
 import 'package:prearticle/notifier/Firebase_Auth_Notifier.dart';

@@ -32,18 +32,18 @@ class _BookDetailsState extends State<BookDetails> {
     });
   }
 
+  String bookpath;
+
   checkDownload(String name) {
     if (dls.isEmpty) {
       return null;
     } else {
-      for (int i = 0; i <= dls.length; i++) {
+      for (int i = 0; i < dls.length; i++) {
         Map dl = dls[i];
         if (dl['name'] == name) {
           return dl['path'];
-        } else {
-          return null;
         }
-      }
+      }   
     }
   }
 
@@ -63,6 +63,7 @@ class _BookDetailsState extends State<BookDetails> {
     } else {
       downloading(context, url, filename, imageUrl, index1);
     }
+    setState(() {});
   }
 
   downloading(BuildContext context, String fileUrl, String filename,
@@ -202,6 +203,7 @@ class _BookDetailsState extends State<BookDetails> {
         ); */
           }
         }));
+        setState(() {});
   }
 
   @override
@@ -506,6 +508,7 @@ class _BookDetailsState extends State<BookDetails> {
                                                           "vertical",
                                                           true);
                                                       EpubKitty.open(path);
+                                                      setState(() {});
                                                     },
                                                     child: Text(
                                                       "Read Book",
@@ -535,11 +538,11 @@ class _BookDetailsState extends State<BookDetails> {
                                                 Center(
                                                     child: RaisedButton(
                                                       elevation: 0,
-                                                      onPressed: () =>
-                                                          startDownload(
+                                                      onPressed: () {
+                                                        startDownload(
                                                         context,
                                                         snapshot.data.documents[
-                                                            index1]['File'],
+                                                            index1]['file'],
                                                         snapshot
                                                             .data
                                                             .documents[index1]
@@ -551,7 +554,9 @@ class _BookDetailsState extends State<BookDetails> {
                                                         snapshot.data.documents[
                                                             index1]['Image'],
                                                         index1,
-                                                      ),
+                                                      );
+                                                      setState(() {});
+                                                      },
                                                       color: Color(0xff6e9bdf),
                                                       child: Text(
                                                         'Add to Library',
@@ -559,6 +564,7 @@ class _BookDetailsState extends State<BookDetails> {
                                                           color: Colors.white,
                                                         ),
                                                       ),
+                                                      
                                                     ),
                                                   ),
                                           )),

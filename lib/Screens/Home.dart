@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:prearticle/Configuration/app_config.dart';
+import 'package:prearticle/Providers/search_Provider.dart';
 import 'package:prearticle/Widgets/Book_Series_Widget.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:prearticle/Widgets/Card_Swipe.dart';
@@ -14,6 +16,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
+    var queryResultSet = [];
+  var tempSearchStore = [];
+
+  initiateSearch(value) {
+    if (value.length == 0) {
+      setState(() {
+        queryResultSet = [];
+        tempSearchStore = [];
+      });
+    }
+
+    var capitalizedValue =
+        value.substring(0, 1).toUpperCase() + value.substring(1);
+
+    if (queryResultSet.length == 0 && value.length == 1) {
+      SearchService().searchByName(value).then((QuerySnapshot docs) {
+        for (int i = 0; i < docs.documents.length; ++i) {
+          queryResultSet.add(docs.documents[i].data);
+        }
+      });
+    } else {
+      tempSearchStore = [];
+      queryResultSet.forEach((element) {
+        if (element['Name'].startsWith(capitalizedValue)) {
+          setState(() {
+            tempSearchStore.add(element);
+          });
+        }
+      });
+    }
+  }
+
+
+  
 
   int currentIndex;
   
@@ -32,6 +71,7 @@ class _HomePageState extends State<HomePage> {
     SizeConfig().init(context);
     int index = 0;
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Color(0xff6e9bdf),
           appBar: AppBar(
             leading: Icon(Icons.menu),
@@ -72,6 +112,9 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.only(left: 20, right: 20),
                         width: SizeConfig.blockSizeHorizontal * 100 - 40,
                         child: TextField(
+                          onChanged: (val) {
+                initiateSearch(val);
+              },
                           decoration: InputDecoration(
                             hintText: 'Search Here',
                             border: InputBorder.none,
@@ -83,6 +126,17 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+              Expanded(
+                flex: 0,
+                child: ListView
+                (
+                  
+              padding: EdgeInsets.only(left: 10.0, right: 10.0),
+              primary: false,
+              shrinkWrap: true,
+              children: tempSearchStore.map((element) {
+                return buildResultCard(element);
+              }).toList())),
               Expanded(
                 flex: 1,
                 child: Container(
@@ -150,4 +204,26 @@ class _HomePageState extends State<HomePage> {
       ), */
     );
   }
+}
+
+Widget buildResultCard(data) {
+  return new Stack(
+    children: <Widget>[
+    Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    elevation: 2.0,
+    child: Container(
+      child: Center(
+        child: Text(data['Name'],
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20.0,
+        ),
+        )
+      )
+    )
+  ),
+    ],
+  );
 }
