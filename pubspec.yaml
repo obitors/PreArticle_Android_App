@@ -29,7 +29,6 @@ dependencies:
   flutter_rounded_progress_bar: ^0.1.2
   http: any
   flutter_placeholder_textlines: ^1.0.4
-  sqflite: ^1.3.0
   epub_kitty: ^0.1.7
   path_provider: ^1.6.5
   firebase_core: ^0.4.0+9
@@ -44,10 +43,11 @@ dependencies:
   objectdb: ^1.0.7+1
   permission_handler: ^4.2.0+hotfix.1
   permission: ^0.1.7
-  epub: ^2.1.0
   flutter_spinkit: "^4.1.2"
   rflutter_alert: ^1.0.3
   webview_flutter: ^0.3.20+2
+  overlay_container: ^0.0.4+1
+  align_positioned: ^1.2.5
   
 
 dev_dependencies:

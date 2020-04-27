@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Providers/search_Provider.dart';
 
+import 'Book_Details.dart';
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => new _MyHomePageState();
@@ -77,26 +79,32 @@ class _MyHomePageState extends State<MyHomePage> {
               primary: false,
               shrinkWrap: true,
               children: tempSearchStore.map((element) {
-                return buildResultCard(element);
+                return GestureDetector(
+    onTap: () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (BuildContext context) => BookDetails(),
+            settings: RouteSettings(
+                arguments: element['Name'])),
+      );
+    },
+    child: Card(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        elevation: 2.0,
+        child: Container(
+            child: Center(
+                child: Text(
+          element['Name'],
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20.0,
+          ),
+        )))),
+  );
               }).toList())
         ]));
   }
 }
 
-Widget buildResultCard(data) {
-  return Card(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-    elevation: 2.0,
-    child: Container(
-      child: Center(
-        child: Text(data['Name'],
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 20.0,
-        ),
-        )
-      )
-    )
-  );
-}

@@ -43,7 +43,7 @@ class _BookDetailsState extends State<BookDetails> {
         if (dl['name'] == name) {
           return dl['path'];
         }
-      }   
+      }
     }
   }
 
@@ -51,23 +51,26 @@ class _BookDetailsState extends State<BookDetails> {
   void initState() {
     super.initState();
     getDownloads();
+    setState(() {
+      
+    });
   }
 
   Future startDownload(BuildContext context, String url, String filename,
-      String imageUrl, var index1) async {
+      String imageUrl) async {
     PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.storage);
     if (permission != PermissionStatus.granted) {
       await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-      downloading(context, url, filename, imageUrl, index1);
+      downloading(context, url, filename, imageUrl);
     } else {
-      downloading(context, url, filename, imageUrl, index1);
+      downloading(context, url, filename, imageUrl);
     }
-    setState(() {});
+
   }
 
   downloading(BuildContext context, String fileUrl, String filename,
-      String imageUrl, var index1) async {
+      String imageUrl) async {
     Directory appDocDir = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationSupportDirectory();
@@ -203,12 +206,11 @@ class _BookDetailsState extends State<BookDetails> {
         ); */
           }
         }));
-        setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final int index1 = ModalRoute.of(context).settings.arguments;
+    final String name = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Color(0xff6e9bdf),
       appBar: AppBar(
@@ -232,7 +234,10 @@ class _BookDetailsState extends State<BookDetails> {
         elevation: 0,
       ),
       body: StreamBuilder(
-        stream: Firestore.instance.collection("Books").snapshots(),
+        stream: Firestore.instance
+            .collection("Books")
+            .where("Name", isEqualTo: name)
+            .snapshots(),
         builder: (
           BuildContext context,
           AsyncSnapshot snapshot,
@@ -276,14 +281,14 @@ class _BookDetailsState extends State<BookDetails> {
                                           height: 270,
                                           width: 220,
                                           decoration: BoxDecoration(
-                                              color: Colors.blue,
+                                              color: Colors.grey[300],
                                               borderRadius:
                                                   BorderRadius.circular(20)),
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             child: Image.network(
-                                              snapshot.data.documents[index1]
+                                              snapshot.data.documents[0]
                                                   ['Image'],
                                               fit: BoxFit.cover,
                                             ),
@@ -336,8 +341,9 @@ class _BookDetailsState extends State<BookDetails> {
                                                     SizedBox(
                                                       width: 300,
                                                       child: Text(
-                                                        snapshot.data.documents[
-                                                            index1]['Name'],
+                                                        snapshot.data
+                                                                .documents[0]
+                                                            ['Name'],
                                                         /* .toUpperCase(), */
                                                         style: TextStyle(
                                                           color:
@@ -371,8 +377,7 @@ class _BookDetailsState extends State<BookDetails> {
                                                   height: 10,
                                                 ),
                                                 Text(
-                                                  snapshot.data
-                                                          .documents[index1]
+                                                  snapshot.data.documents[0]
                                                       ['Author'],
                                                   style: TextStyle(
                                                     color: Colors.grey[600],
@@ -387,7 +392,7 @@ class _BookDetailsState extends State<BookDetails> {
                                                         Axis.horizontal,
                                                     itemCount: snapshot
                                                         .data
-                                                        .documents[index1]
+                                                        .documents[0]
                                                             ['Category']
                                                         .length,
                                                     itemBuilder:
@@ -421,7 +426,7 @@ class _BookDetailsState extends State<BookDetails> {
                                                                             20),
                                                                 child: Center(
                                                                   child: Text(
-                                                                    snapshot.data.documents[index1]
+                                                                    snapshot.data.documents[0]
                                                                             [
                                                                             'Category']
                                                                         [index],
@@ -462,7 +467,7 @@ class _BookDetailsState extends State<BookDetails> {
                                             flex: 1,
                                             child: SingleChildScrollView(
                                               child: Text(
-                                                snapshot.data.documents[index1]
+                                                snapshot.data.documents[0]
                                                     ['Description'],
                                                 style: TextStyle(
                                                   color: Colors.grey[500],
@@ -483,20 +488,20 @@ class _BookDetailsState extends State<BookDetails> {
                                               borderRadius:
                                                   BorderRadius.circular(50),
                                             ),
-                                            child: checkDownload(snapshot
-                                                        .data
-                                                        .documents[index1]
-                                                            ['Name']
+                                            child: checkDownload(snapshot.data
+                                                        .documents[0]['Name']
                                                         .replaceAll(" ", "_")
                                                         .replaceAll(
                                                             r"\'", "")) !=
                                                     null
                                                 ? FlatButton(
                                                     onPressed: () {
-                                                      String path =
+                                                      
+                                                      setState(() {
+                                                        String path =
                                                           checkDownload(snapshot
                                                               .data
-                                                              .documents[index1]
+                                                              .documents[0]
                                                                   ['Name']
                                                               .replaceAll(
                                                                   " ", "_")
@@ -508,7 +513,7 @@ class _BookDetailsState extends State<BookDetails> {
                                                           "vertical",
                                                           true);
                                                       EpubKitty.open(path);
-                                                      setState(() {});
+                                                      });
                                                     },
                                                     child: Text(
                                                       "Read Book",
@@ -539,23 +544,26 @@ class _BookDetailsState extends State<BookDetails> {
                                                     child: RaisedButton(
                                                       elevation: 0,
                                                       onPressed: () {
-                                                        startDownload(
-                                                        context,
-                                                        snapshot.data.documents[
-                                                            index1]['file'],
-                                                        snapshot
-                                                            .data
-                                                            .documents[index1]
-                                                                ['Name']
-                                                            .replaceAll(
-                                                                " ", "_")
-                                                            .replaceAll(
-                                                                r"\'", ""),
-                                                        snapshot.data.documents[
-                                                            index1]['Image'],
-                                                        index1,
-                                                      );
-                                                      setState(() {});
+                                                       
+                                                        setState(() {
+                                                           startDownload(
+                                                          context,
+                                                          snapshot.data
+                                                                  .documents[0]
+                                                              ['file'],
+                                                          snapshot
+                                                              .data
+                                                              .documents[0]
+                                                                  ['Name']
+                                                              .replaceAll(
+                                                                  " ", "_")
+                                                              .replaceAll(
+                                                                  r"\'", ""),
+                                                          snapshot.data
+                                                                  .documents[0]
+                                                              ['Image'],
+                                                        );
+                                                        });
                                                       },
                                                       color: Color(0xff6e9bdf),
                                                       child: Text(
@@ -564,7 +572,6 @@ class _BookDetailsState extends State<BookDetails> {
                                                           color: Colors.white,
                                                         ),
                                                       ),
-                                                      
                                                     ),
                                                   ),
                                           )),

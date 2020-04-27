@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prearticle/Screens/Collection_Books.dart';
 import 'package:prearticle/Screens/Contents_List.dart';
 
 class BookSeriesWidget extends StatefulWidget {
@@ -12,36 +14,59 @@ class BookSeriesWidget extends StatefulWidget {
 class _BookSeriesWidgetState extends State<BookSeriesWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return StreamBuilder(
+      stream: Firestore.instance.collection("Book Series").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        return snapshot.hasData? Container(
+          child: ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: 7,
+      itemCount: snapshot.data.documents.length,
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: EdgeInsets.only(right: 10, left: 10),
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => Contents(
-                    onPressed: () {},
-                  ),
-                ),
-              );
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            CollectionBooks(),
+                                        settings: RouteSettings(
+                                            arguments: snapshot.data.documents[index]['Name'])),
+                                  );
             },
             child: Container(
               width: 250,
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(15)),
-              child: ClipRRect(
+                  color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.network(
-                  'https://cdn.shopify.com/s/files/1/0057/3728/3618/products/5cae019e64c0ee10ead36a00e60f0137_eeb2d749-fdbe-46fd-978a-870cc7e0ddf7_500x.jpg?v=1573593942',
+                  snapshot.data.documents[index]['Image'],
                   fit: BoxFit.cover,
                 ),
+              ),),
+              Padding(padding: EdgeInsets.only(left: 10, bottom: 10),
+                child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(snapshot.data.documents[index]['Name'],
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                )
+              ),
+              ),
+                ],
               ),
             ),
           ),
         );
+      },
+    )
+        ):
+        Container();
       },
     );
   }

@@ -132,15 +132,14 @@ class _CardSwipeState extends State<CardSwipe> {
                                               builder: (BuildContext context) =>
                                                   BookDetails(),
                                                   settings: RouteSettings(
-                                            arguments: index)
+                                            arguments: snapshot.data.documents[index]['Name'])
                                             ),
                                           );
                                         },
                                         child: ClipRRect(
                                             borderRadius: borderRadius,
                                             child: Image.network(
-                                                snapshot.data.documents[index]
-                                                    ['Image'],
+                                                snapshot.data.documents[index]['Image'],
                                                 fit: BoxFit.cover,
                                               ),),
                                       ),)
