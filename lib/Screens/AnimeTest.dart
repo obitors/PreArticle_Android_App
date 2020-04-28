@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Screens/Anime.dart';
+import 'package:prearticle/Screens/Login_Page.dart';
+import 'package:prearticle/Screens/SignUp_page.dart';
 
-
-class MyApp extends StatefulWidget {
+class IntroScreen extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _IntroScreenState createState() => _IntroScreenState();
 }
 
-class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+class _IntroScreenState extends State<IntroScreen>
+    with SingleTickerProviderStateMixin {
   final int delayedAmount = 500;
   double _scale;
   AnimationController _controller;
@@ -28,34 +31,91 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final color = Colors.white;
+    SizeConfig().init(context);
+    final color = Color(0xff6e9bdf);
     _scale = 1 - _controller.value;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-          backgroundColor: Color(0xFF8185E2),
+          backgroundColor: Colors.white,
           body: Center(
             child: Column(
               children: <Widget>[
-                AvatarGlow(
-                  endRadius: 90,
-                  duration: Duration(seconds: 2),
-                  glowColor: Colors.white24,
-                  repeat: true,
-                  repeatPauseDuration: Duration(seconds: 2),
-                  startDelay: Duration(seconds: 1),
-                  child: Material(
-                      elevation: 8.0,
-                      shape: CircleBorder(),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey[100],
-                        child: FlutterLogo(
-                          size: 50.0,
-                        ),
-                        radius: 50.0,
-                      )),
-                ),
                 DelayedAnimation(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: SizeConfig.blockSizeVertical * 60,
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: SizeConfig.blockSizeVertical * 13.7),
+                          ),
+                          Hero(
+                            tag: widget.hashCode,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: SizeConfig.blockSizeHorizontal * 44.1,
+                                  height: SizeConfig.blockSizeHorizontal * 60,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage('assets/images/logo.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    Text(
+                                      'Pre ',
+                                      style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.safeBlockHorizontal * 9,
+                                        color: Color(0xff6e9bdf),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Article',
+                                      style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.safeBlockHorizontal * 9,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  'Book Store',
+                                  style: TextStyle(
+                                    fontSize:
+                                        SizeConfig.safeBlockHorizontal * 7.5,
+                                    letterSpacing: 3.6,
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  delay: delayedAmount + 500,
+                ),
+                /* DelayedAnimation (
                   child: Text(
                     "Hi There",
                     style: TextStyle(
@@ -74,48 +134,66 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                         color: color),
                   ),
                   delay: delayedAmount + 2000,
-                ),
+                ), */
                 SizedBox(
                   height: 30.0,
                 ),
                 DelayedAnimation(
                   child: Text(
-                    "Your New Personal",
+                    "A Free E-Book",
                     style: TextStyle(fontSize: 20.0, color: color),
                   ),
-                  delay: delayedAmount + 3000,
+                  delay: delayedAmount + 1000,
                 ),
                 DelayedAnimation(
                   child: Text(
-                    "Journaling  companion",
+                    "And Articles Reader",
                     style: TextStyle(fontSize: 20.0, color: color),
                   ),
-                  delay: delayedAmount + 3000,
+                  delay: delayedAmount + 1000,
                 ),
                 SizedBox(
                   height: 100.0,
                 ),
                 DelayedAnimation(
-                child: GestureDetector(
-                  onTapDown: _onTapDown,
-                  onTapUp: _onTapUp,
-                  child: Transform.scale(
-                    scale: _scale,
-                    child: _animatedButtonUI,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SignUpPage(
+                                  onPressed: () {},
+                                )),
+                      );
+                    },
+                    child: Transform.scale(
+                      scale: _scale,
+                      child: _animatedButtonUI,
+                    ),
                   ),
+                  delay: delayedAmount + 2000,
                 ),
-                delay: delayedAmount + 4000,
-              ),
-              SizedBox(height: 50.0,),
+                SizedBox(
+                  height: 50.0,
+                ),
                 DelayedAnimation(
-                  child: Text(
-                    "I Already have An Account".toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        color: color),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => loginPage(
+                                  onPressed: () {},
+                                )),
+                      );
+                    },
+                    child: Text(
+                      "I Already have An Account".toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: color),
+                    ),
                   ),
-                  delay: delayedAmount + 5000,
+                  delay: delayedAmount + 3000,
                 ),
               ],
             ),
@@ -142,25 +220,17 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         width: 270,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100.0),
-          color: Colors.white,
+          color: Color(0xff6e9bdf),
         ),
         child: Center(
           child: Text(
-            'Hi Reflectly',
+            'Join PreArticle',
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF8185E2),
+              color: Colors.white,
             ),
           ),
         ),
       );
-
-  void _onTapDown(TapDownDetails details) {
-    _controller.forward();
-  }
-
-  void _onTapUp(TapUpDetails details) {
-    _controller.reverse();
-  }
 }

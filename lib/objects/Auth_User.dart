@@ -1,8 +1,8 @@
 class User {
 
-  String userName;
-  String userPassword;
-  String userEmail;
+  String username;
+  String password;
+  String email;
 
   User();
 

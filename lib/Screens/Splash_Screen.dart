@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:prearticle/Screens/AnimeTest.dart';
+import 'package:prearticle/Screens/Home.dart';
 import 'package:prearticle/Screens/Login_Page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:prearticle/Configuration/app_config.dart';
+import 'package:prearticle/notifier/Firebase_Auth_Notifier.dart';
+import 'package:provider/provider.dart';
 
 class splash extends StatefulWidget {
   splash({Key key}) : super(key: key);
@@ -27,7 +31,11 @@ class _splashState extends State<splash> {
   onDoneLoading() async {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(
-          builder: (context) => loginPage(onPressed: () {  },), 
+          builder: (context) => Consumer<AuthNotifier>(
+        builder: (context, notifier, child) {
+          return notifier.user != null ? HomePage(onPressed: () {  },) :IntroScreen();
+        },
+      ),
         ),);
   }
 
@@ -44,7 +52,7 @@ class _splashState extends State<splash> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Hero(
-                  tag: widget.hashCode,
+                  tag: 'logo',
                   child: Column(
                     children: <Widget>[
                       Container(
