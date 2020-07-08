@@ -1,14 +1,18 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Screens/Home.dart';
 import 'package:prearticle/Screens/Navigation_Home.dart';
 import 'package:prearticle/Screens/SignUp_page.dart';
+import 'package:prearticle/Widgets/Login_Error_Popup.dart';
 import 'package:prearticle/api/user_api.dart';
 import 'package:prearticle/notifier/Firebase_Auth_Notifier.dart';
 import 'package:prearticle/objects/Auth_User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -34,21 +38,97 @@ class _loginPageState extends State<loginPage> {
     super.initState();
   }
 
-  void _submitForm() {
+  void _submitForm()  {
     if (!_formKey.currentState.validate()) {
       return;
     }
 
+    var error;
     _formKey.currentState.save();
 
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
 
     if (_authMode == AuthMode.Login) {
-      login(_user, authNotifier);
+      error =  login(_user, authNotifier);
     } else {
       signup(_user, authNotifier);
     }
+
+
+    Future.delayed(const Duration(milliseconds: 1000), () {
+
+// Here you can write your code
+
+  if (error != null) {
+      var alertStyle = AlertStyle(
+        animationType: AnimationType.fromTop,
+        isCloseButton: true,
+        isOverlayTapDismiss: true,
+        descStyle: TextStyle(color: Colors.grey[800]),
+        animationDuration: Duration(milliseconds: 400),
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        
+        titleStyle: TextStyle(
+          color: Color(0xff6e9bdf),
+        ),
+      );
+
+      setState(() {
+        /* Alert (
+
+        context: context,
+        image: Image.asset("assets/images/loginerror.png"),
+        style: alertStyle,
+        title: "Login Error",
+        desc: 'Please check your credentials or internet cnnection',
+        content: Column(
+          children: <Widget>[
+            SizedBox(height: 30,),
+            GestureDetector(
+              onTap: ()  => Navigator.pop(context),
+              child: Container(
+              height: 45,
+              width: double.infinity/1.5,
+              decoration: BoxDecoration(
+                color: Color(0xff6e9bdf),
+                borderRadius: BorderRadius.circular(25)
+              ),
+              child: Center(
+                child: Text('Close',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+                ),
+              ),
+            ),
+            )
+          ],
+        ),
+        buttons: [
+          
+        ]
+      ).show(); */
+
+      Flushbar(
+          title: "Sign In Error",
+          message: 'Please check your credentials or internet Connection',
+          duration: Duration(seconds: 5),
+        )..show(context);
+      });
+    }
+
+});
+    
+  }
+
+  _dismissKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   @override
@@ -164,7 +244,7 @@ class _loginPageState extends State<loginPage> {
                 ),
           Column(
             children: <Widget>[
-              Container(
+              /* Container(
                 child: Text(
                   'SignIn With Google',
                   style: TextStyle(
@@ -172,7 +252,7 @@ class _loginPageState extends State<loginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
+              ), */
               SizedBox(
                 height: SizeConfig.blockSizeVertical * 1.7,
               ),
@@ -189,7 +269,8 @@ class _loginPageState extends State<loginPage> {
                     _authMode = _authMode == AuthMode.Login
                         ? AuthMode.Signup
                         : AuthMode.Login;
-                  });
+                  }
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -223,6 +304,25 @@ class _loginPageState extends State<loginPage> {
     );
   }
 
+  _alert() {
+    return Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Delete Book",
+      desc: "Please Check your credentials",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Cancel",
+            style: TextStyle(color: Colors.grey[600], fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          color: Colors.grey[300],
+        ),
+      ],
+    ).show();
+  }
+
   Widget _login() {
     return Column(
       children: <Widget>[
@@ -243,96 +343,108 @@ class _loginPageState extends State<loginPage> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Container(
-                  height: SizeConfig.blockSizeVertical * 5.3,
-                  width: SizeConfig.blockSizeHorizontal * 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.grey[200],
-                      width: 2,
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    _dismissKeyboard(context);
+                  },
+                  child: Container(
+                    height: SizeConfig.blockSizeVertical * 5.3,
+                    width: SizeConfig.blockSizeHorizontal * 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.grey[200],
+                        width: 2,
+                      ),
+                      color: Colors.transparent,
                     ),
-                    color: Colors.transparent,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 20),
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.email),
-                              hintText: 'Email address',
-                              border: InputBorder.none,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.email),
+                                hintText: 'Email address',
+                                border: InputBorder.none,
+                              ),
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Email is required';
+                                }
+
+                                if (!RegExp(
+                                        r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                    .hasMatch(value)) {
+                                  return 'Please enter a valid email address';
+                                }
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                _user.email = value;
+                              },
                             ),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Email is required';
-                              }
-
-                              if (!RegExp(
-                                      r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                                  .hasMatch(value)) {
-                                return 'Please enter a valid email address';
-                              }
-
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              _user.email = value;
-                            },
                           ),
-                        ),
-                      ]),
+                        ]),
+                  ),
                 ),
                 SizedBox(
                   height: SizeConfig.blockSizeVertical * 1.7,
                 ),
-                Container(
-                  height: SizeConfig.blockSizeVertical * 5.3,
-                  width: SizeConfig.blockSizeHorizontal * 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.grey[200],
-                      width: 2,
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    _dismissKeyboard(context);
+                  },
+                  child: Container(
+                    height: SizeConfig.blockSizeVertical * 5.3,
+                    width: SizeConfig.blockSizeHorizontal * 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.grey[200],
+                        width: 2,
+                      ),
+                      color: Colors.transparent,
                     ),
-                    color: Colors.transparent,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 20),
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.lock),
-                              hintText: 'Password',
-                              border: InputBorder.none,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.lock),
+                                hintText: 'Password',
+                                border: InputBorder.none,
+                              ),
+                              obscureText: true,
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Password is required';
+                                }
+
+                                if (value.length < 5 || value.length > 20) {
+                                  return 'Password must be betweem 5 and 20 characters';
+                                }
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                _user.password = value;
+                              },
                             ),
-                            obscureText: true,
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Password is required';
-                              }
-
-                              if (value.length < 5 || value.length > 20) {
-                                return 'Password must be betweem 5 and 20 characters';
-                              }
-
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              _user.password = value;
-                            },
                           ),
-                        ),
-                      ]),
-                ),
+                        ]),
+                  ),
+                )
               ],
             )),
         SizedBox(
@@ -380,140 +492,158 @@ class _loginPageState extends State<loginPage> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Container(
-                  height: SizeConfig.blockSizeVertical * 5.3,
-                  width: SizeConfig.blockSizeHorizontal * 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.grey[200],
-                      width: 2,
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    _dismissKeyboard(context);
+                  },
+                  child: Container(
+                    height: SizeConfig.blockSizeVertical * 5.3,
+                    width: SizeConfig.blockSizeHorizontal * 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.grey[200],
+                        width: 2,
+                      ),
+                      color: Colors.transparent,
                     ),
-                    color: Colors.transparent,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 20),
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.email),
-                              hintText: 'Username',
-                              border: InputBorder.none,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.person),
+                                hintText: 'Username',
+                                border: InputBorder.none,
+                              ),
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Display Name is required';
+                                }
+
+                                if (value.length < 5 || value.length > 12) {
+                                  return 'Display Name must be betweem 5 and 12 characters';
+                                }
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                _user.username = value;
+                              },
                             ),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Display Name is required';
-                              }
-
-                              if (value.length < 5 || value.length > 12) {
-                                return 'Display Name must be betweem 5 and 12 characters';
-                              }
-
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              _user.username = value;
-                            },
                           ),
-                        ),
-                      ]),
+                        ]),
+                  ),
                 ),
                 SizedBox(
                   height: SizeConfig.blockSizeVertical * 1.7,
                 ),
-                Container(
-                  height: SizeConfig.blockSizeVertical * 5.3,
-                  width: SizeConfig.blockSizeHorizontal * 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.grey[200],
-                      width: 2,
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    _dismissKeyboard(context);
+                  },
+                  child: Container(
+                    height: SizeConfig.blockSizeVertical * 5.3,
+                    width: SizeConfig.blockSizeHorizontal * 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.grey[200],
+                        width: 2,
+                      ),
+                      color: Colors.transparent,
                     ),
-                    color: Colors.transparent,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 20),
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.email),
-                              hintText: 'Email address',
-                              border: InputBorder.none,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.email),
+                                hintText: 'Email address',
+                                border: InputBorder.none,
+                              ),
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Email is required';
+                                }
+
+                                if (!RegExp(
+                                        r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                    .hasMatch(value)) {
+                                  return 'Please enter a valid email address';
+                                }
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                _user.email = value;
+                              },
                             ),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Email is required';
-                              }
-
-                              if (!RegExp(
-                                      r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                                  .hasMatch(value)) {
-                                return 'Please enter a valid email address';
-                              }
-
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              _user.email = value;
-                            },
                           ),
-                        ),
-                      ]),
+                        ]),
+                  ),
                 ),
                 SizedBox(
                   height: SizeConfig.blockSizeVertical * 1.7,
                 ),
-                Container(
-                  height: SizeConfig.blockSizeVertical * 5.3,
-                  width: SizeConfig.blockSizeHorizontal * 70,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.grey[200],
-                      width: 2,
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    _dismissKeyboard(context);
+                  },
+                  child: Container(
+                    height: SizeConfig.blockSizeVertical * 5.3,
+                    width: SizeConfig.blockSizeHorizontal * 70,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.grey[200],
+                        width: 2,
+                      ),
+                      color: Colors.transparent,
                     ),
-                    color: Colors.transparent,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 20),
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.lock),
-                              hintText: 'Password',
-                              border: InputBorder.none,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.lock),
+                                hintText: 'Password',
+                                border: InputBorder.none,
+                              ),
+                              obscureText: true,
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Password is required';
+                                }
+
+                                if (value.length < 5 || value.length > 20) {
+                                  return 'Password must be betweem 5 and 20 characters';
+                                }
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                _user.password = value;
+                              },
                             ),
-                            obscureText: true,
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Password is required';
-                              }
-
-                              if (value.length < 5 || value.length > 20) {
-                                return 'Password must be betweem 5 and 20 characters';
-                              }
-
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              _user.password = value;
-                            },
                           ),
-                        ),
-                      ]),
+                        ]),
+                  ),
                 ),
               ],
             )),

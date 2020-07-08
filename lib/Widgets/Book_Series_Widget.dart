@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Screens/Collection_Books.dart';
 import 'package:prearticle/Screens/Contents_List.dart';
 
@@ -14,6 +15,7 @@ class BookSeriesWidget extends StatefulWidget {
 class _BookSeriesWidgetState extends State<BookSeriesWidget> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return StreamBuilder(
       stream: Firestore.instance.collection("Book Series").snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -24,7 +26,7 @@ class _BookSeriesWidgetState extends State<BookSeriesWidget> {
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: EdgeInsets.only(right: 10, left: 10),
-          child: GestureDetector(
+          child: GestureDetector (
             onTap: () {
               Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -35,7 +37,7 @@ class _BookSeriesWidgetState extends State<BookSeriesWidget> {
                                   );
             },
             child: Container(
-              width: 250,
+              width: SizeConfig.blockSizeVertical * 25,
               decoration: BoxDecoration(
                   color: Colors.grey[300], borderRadius: BorderRadius.circular(15)),
               child: Stack(
@@ -54,7 +56,7 @@ class _BookSeriesWidgetState extends State<BookSeriesWidget> {
                 child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(snapshot.data.documents[index]['Name'],
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                 )
               ),
               ),

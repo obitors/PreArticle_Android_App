@@ -1,4 +1,4 @@
-/* import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _PreArticleWebsiteState extends State<PreArticleWebsite> {
         // This drop down menu demonstrates that Flutter widgets can be shown over the web view.
         actions: <Widget>[
           NavigationControls(_controller.future),
-          SampleMenu(_controller.future),
+          /* SampleMenu(_controller.future), */
         ],
       ),
       // We're using a Builder here so we have a context that is below the Scaffold
@@ -315,4 +315,4 @@ class NavigationControls extends StatelessWidget {
       },
     );
   }
-} */
+}

@@ -7,7 +7,7 @@ import 'package:prearticle/Screens/Book_Details.dart';
 import 'package:prearticle/Widgets/Book_Series_Widget.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:prearticle/Widgets/Card_Swipe.dart';
-import 'package:getflutter/getflutter.dart';
+
 
 
 
@@ -20,6 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   var queryResultSet = [];
   var tempSearchStore = [];
 
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff6e9bdf),
-      appBar: AppBar(
+      appBar: AppBar (
         leading: Icon(Icons.menu),
         centerTitle: true,
         title: Text(

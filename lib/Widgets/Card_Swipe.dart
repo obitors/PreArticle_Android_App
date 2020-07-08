@@ -58,9 +58,11 @@ class _CardSwipeState extends State<CardSwipe> {
 
   @override
   Widget build(BuildContext context) {
+    
     final borderRadius = BorderRadius.circular(30);
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: StreamBuilder(
         stream: Firestore.instance.collection("Books").snapshots(),
@@ -68,15 +70,16 @@ class _CardSwipeState extends State<CardSwipe> {
           return snapshot.hasData? Stack(
             children: [
               PageView.builder(
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: /* snapshot.data.documents.length */10,
                   //itemCount: snapshot.data,
                   controller: pageController,
                   itemBuilder: (context, index) {
                     final lerp =
                         lerpDouble(0, 0, (index - _pageNotifier.value).abs());
+
                     double opacity = lerpDouble(
                         0.0, .3, (index - _pageNotifier.value).abs());
-                    double heights = lerpDouble(size.height / 2,
+                    double heights = lerpDouble(size.height / 1,
                         size.height / 2.2, (index - _pageNotifier.value).abs());
                     if (opacity > 1.0) opacity = 1.0;
                     if (opacity < 0.0) opacity = 0.0;
@@ -87,7 +90,7 @@ class _CardSwipeState extends State<CardSwipe> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Card(
-                            color: Colors.transparent,
+                            color: Colors.grey[300],
                             borderOnForeground: true,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -96,7 +99,7 @@ class _CardSwipeState extends State<CardSwipe> {
                             clipBehavior: Clip.hardEdge,
                             child: SizedBox(
                               height: heights,
-                              width: size.width,
+                              width: heights/1.35,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -112,9 +115,9 @@ class _CardSwipeState extends State<CardSwipe> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                           top: 0.0,
-                                          left: 20.0,
-                                          right: 20.0,
-                                          bottom: 20),
+                                          left: 0.0,
+                                          right: 0.0,
+                                          bottom: 0),
                                       /* child: ClipRRect(
                                           borderRadius: borderRadius,
                                           child: Hero(
@@ -130,7 +133,7 @@ class _CardSwipeState extends State<CardSwipe> {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  BookDetails(),
+                                                  BookDetails(name: snapshot.data.documents[index]['Name']),
                                                   settings: RouteSettings(
                                             arguments: snapshot.data.documents[index]['Name'])
                                             ),

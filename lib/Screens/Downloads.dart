@@ -8,6 +8,7 @@ import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Database/Downloads_Database.dart';
+import 'package:prearticle/Screens/Home.dart';
 import 'package:prearticle/Widgets/HundredWays.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -51,11 +52,13 @@ class _DownloadsState extends State<Downloads> {
   }
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(
+    BuildContext context,
+  ) {
     SizeConfig().init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+      backgroundColor: Color(0xff6e9bdf),
+      /* appBar: AppBar(
         leading: IconButton(
             icon: Icon(Icons.menu),
             iconSize: 30.0,
@@ -74,107 +77,223 @@ class _DownloadsState extends State<Downloads> {
             onPressed: () {},
           ),
         ],
-      ),
+      ), */
       body: dls.isEmpty
-          ? Center(
-              child: Column(
+          ? SafeArea(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(bottom: 20, left: 30, right: 10, top:20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            /* IconButton(
+                                icon: Icon(Icons.arrow_back_ios,
+                                    color: Colors.white),
+                                onPressed:  (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(onPressed: () {  },)));
+                                }
+                                                  
+                                            ), */
+                                          
+                              
+                            Text(
+                              'Downloads',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                              ),
+                            ),
+                          ],
+                        ),
+                        /* IconButton(
+                            icon: Icon(Icons.search, color: Colors.white),
+                            onPressed: null), */
+                      ],
+                    ),
+                  ),
+                  Expanded(child: Container(
+            decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25),
+                          topRight: Radius.circular(25)),
+                      color: Colors.white,
+                    ),
+              child: Center(
+                
+                child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image.asset(
-                    "assets/images/logo.png",
-                    height: 300,
-                    width: 300,
+                    "assets/images/noDownloads.jpg",
+                    height: 450,
+                    width: 450,
                   ),
                   SizedBox(
                     height: 50,
                   ),
-                  Text(
-                    "You have not downloaded any books yet",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  
                 ],
               ),
-            )
-          : Container(
-              child: Padding(
-                padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                child: GridView.builder(
-                    itemCount: dls.length,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 300,
-                      childAspectRatio: .75,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      Map dl = dls[index];
-                      return new GestureDetector(
-                        onLongPress: () {
-                          Alert(
-                            context: context,
-                            type: AlertType.warning,
-                            title: "Delete Book",
-                            desc: "Do you really want to delete '${dl['name']}'" .replaceAll("_", " ")
-                                    .replaceAll(r"\'", ""),
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                color: Color.fromRGBO(0, 179, 134, 1.0),
+              )
+            ))
+              ],
+            ),
+          )
+          : SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20, left: 30, right: 10, top:20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            /* IconButton(
+                                icon: Icon(Icons.arrow_back_ios,
+                                    color: Colors.white),
+                                onPressed:  (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(onPressed: () {  },)));
+                                }
+                                                  
+                                            ), */
+                                          
+                              
+                            Text(
+                              'Downloads',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
                               ),
-                              DialogButton(
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () async {
-                                  db.remove({"id": dl['id']}).then((v) async {
-                                    File f = File(dl['path']);
-                                    File image = File(dl['image']);
-                                    if (await f.exists()) {
-                                      f.delete();
-                                    }
-                                    if (await image.exists()) {
-                                      image.delete();
-                                    }
-                                    setState(() {
-                                      dls.removeAt(index);
-                                    });
-                                    print("done");
-                                    Navigator.pop(context);
-                                  });
-                                },
-                                color: Color(0xff6e9bdf),
-                              )
-                            ],
-                          ).show();
-                        },
-                        child: Container(
-                          width: 25,
-                          decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
+                            ),
+                          ],
+                        ),
+                        /* IconButton(
+                            icon: Icon(Icons.search, color: Colors.white),
+                            onPressed: null), */
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                      child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25),
+                          topRight: Radius.circular(25)),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 30),
+                      child: GridView.builder(
+                          itemCount: dls.length,
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 300,
+                            childAspectRatio: .55,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
+                            Map dl = dls[index];
+                            return new GestureDetector(
+                              onLongPress: () {
+                                Alert(
+                                  context: context,
+                                  type: AlertType.warning,
+                                  title: "Delete Book",
+                                  desc:
+                                      "Do you really want to delete '${dl['name']}'"
+                                          .replaceAll("_", " ")
+                                          .replaceAll(r"\'", ""),
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                            color: Colors.grey[600], fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      color: Colors.grey[300],
+                                    ),
+                                    DialogButton(
+                                      child: Text(
+                                        "Delete",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () async {
+                                        db.remove({"id": dl['id']}).then(
+                                            (v) async {
+                                          File f = File(dl['path']);
+                                          File image = File(dl['image']);
+                                          if (await f.exists()) {
+                                            f.delete();
+                                          }
+                                          if (await image.exists()) {
+                                            image.delete();
+                                          }
+                                          setState(() {
+                                            dls.removeAt(index);
+                                          });
+                                          print("done");
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      color: Color(0xff6e9bdf),
+                                    )
+                                  ],
+                                ).show();
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: double.infinity,
+                                    /* height: 350, */
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.file(
+                                          File(
+                                            dl['image'],
+                                          ),
+                                          fit: BoxFit.cover,
+                                        )
+                                        /* Image.asset(
                               dl['image'],
                               fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          EpubKitty.setConfig(
-                              "iosBook", "#6e9bdf", "vertical", true);
-                          EpubKitty.open(dl['path']);
-                          /* showDialog(
+                            ), */
+                                        ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      dl['name']
+                                          .replaceAll("_", " ")
+                                          .replaceAll(r"\'", ""),
+                                      style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  /* Text(dl['author']), */
+                                ],
+                              ),
+                              onTap: () {
+                                EpubKitty.setConfig(
+                                    "iosBook", "#6e9bdf", "vertical", true);
+                                EpubKitty.open(dl['path']);
+                                /* showDialog(
                 barrierDismissible: false,
                 context: context,
                 child: new CupertinoAlertDialog(
@@ -197,9 +316,12 @@ class _DownloadsState extends State<Downloads> {
                   ],
                 ),
               ); */
-                        },
-                      );
-                    }),
+                              },
+                            );
+                          }),
+                    ),
+                  )),
+                ],
               ),
             ),
       /* bottomNavigationBar: BubbleBottomBar(

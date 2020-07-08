@@ -6,42 +6,60 @@ import 'package:epub_kitty/epub_kitty.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prearticle/Configuration/app_config.dart';
 import 'package:prearticle/Database/Downloads_Database.dart';
 import 'package:prearticle/Providers/Details_Provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:prearticle/Widgets/Downloading_Popup.dart';
-import 'package:prearticle/objects/Book_Data.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/services.dart';
 
 class BookDetails extends StatefulWidget {
-  BookDetails({Key key}) : super(key: key);
+  final String name;
+  BookDetails({Key key, @required this.name}) : super(key: key);
 
   @override
-  _BookDetailsState createState() => _BookDetailsState();
+  BookDetailsState createState() => BookDetailsState(newname: name);
 }
 
-class _BookDetailsState extends State<BookDetails> {
+enum downloaded { yes, no }
+
+class BookDetailsState extends State<BookDetails> {
+  String newname;
+  BookDetailsState({this.newname});
+
+  String downloadPath;
+  downloaded _downloaded = downloaded.no;
   var db = DownloadsDB();
   List dls = List();
 
-  getDownloads() async {
+  /*  getDownloads() async {
     List l = await db.listAll();
     setState(() {
       dls.addAll(l);
     });
-  }
+    
+  } */
 
   String bookpath;
 
-  checkDownload(String name) {
+  checkDownload(String somename) async {
+    List l = await db.listAll();
+    setState(() {
+      dls.addAll(l);
+    });
     if (dls.isEmpty) {
       return null;
     } else {
       for (int i = 0; i < dls.length; i++) {
         Map dl = dls[i];
-        if (dl['name'] == name) {
-          return dl['path'];
+        if (dl['name'] == somename) {
+          setState(() {
+            downloadPath = dl['path'];
+            print(downloadPath);
+            /* return dl['path']; */
+          });
         }
       }
     }
@@ -50,11 +68,16 @@ class _BookDetailsState extends State<BookDetails> {
   @override
   void initState() {
     super.initState();
-    getDownloads();
-    setState(() {
-      
-    });
+    /* getDownloads(); */
+    print(widget.name.replaceAll(" ", "_").replaceAll(r"\'", ""));
+    String somename = widget.name.replaceAll(" ", "_").replaceAll(r"\'", "");
+    checkDownload(somename);
   }
+
+  @override
+void dipose(){
+    super.dispose();
+}
 
   Future startDownload(BuildContext context, String url, String filename,
       String imageUrl) async {
@@ -62,11 +85,14 @@ class _BookDetailsState extends State<BookDetails> {
         .checkPermissionStatus(PermissionGroup.storage);
     if (permission != PermissionStatus.granted) {
       await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-      downloading(context, url, filename, imageUrl);
+      setState(() {
+        downloading(context, url, filename, imageUrl);
+      });
     } else {
-      downloading(context, url, filename, imageUrl);
+      setState(() {
+        downloading(context, url, filename, imageUrl);
+      });
     }
-
   }
 
   downloading(BuildContext context, String fileUrl, String filename,
@@ -116,17 +142,20 @@ class _BookDetailsState extends State<BookDetails> {
       builder: (context) => DownloadAlert(
         url: fileUrl,
         path: filepath,
+        ipath: imagepath,
+        iurl: imageUrl,
       ),
-    ).then((value) => showDialog(
+    )/* .then((value) => showDialog(
           barrierDismissible: false,
           context: context,
           builder: (context) => DownloadAlert(
             url: imageUrl,
             path: imagepath,
           ),
-        ).then((v) {
-          if (v != null) {
-            /* final databaseReference = Firestore.instance;
+        ) */
+        .then((v) async {
+      if (v != null) {
+        /* final databaseReference = Firestore.instance;
         var doc = Firestore.instance.collection("Books").snapshots();
         databaseReference
             .collection("Data")
@@ -143,6 +172,9 @@ class _BookDetailsState extends State<BookDetails> {
           );
         }); */
 
+        if (await epubfile.exists()) {
+          if (await imagefile.exists()) {
+            
             Provider.of<DetailsProvider>(context, listen: false).addDownload(
               {
                 "id": filename,
@@ -154,7 +186,18 @@ class _BookDetailsState extends State<BookDetails> {
               },
             );
 
-            /* StreamBuilder (
+            
+              setState(() {
+                _downloaded = downloaded.yes;
+              downloadPath = filepath;
+              });
+              
+
+            
+          }
+        }
+
+        /* StreamBuilder (
           stream: Firestore.instance.collection("Books").snapshots() ,
           builder: (BuildContext context, AsyncSnapshot snapshot){
             return Container (
@@ -171,7 +214,7 @@ class _BookDetailsState extends State<BookDetails> {
           },
         ); */
 
-            /* List<Book> _data = List<Book>();
+        /* List<Book> _data = List<Book>();
         Future<List<Book>> fetchNotes() async {
           var url = 'https://raw.githubusercontent.com/obitors/PreArticle_Android_App/master/lib/Data/collection.json';
           var response = await http.get(url);
@@ -204,16 +247,19 @@ class _BookDetailsState extends State<BookDetails> {
             "author": _data[index1].author,
           },
         ); */
-          }
-        }));
+      }
+    });
   }
+
+  static const pageChannel = const EventChannel('com.xiaofwang.epub_kitty/page');
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final String name = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Color(0xff6e9bdf),
-      appBar: AppBar(
+      /* appBar: AppBar(
         leading: Icon(Icons.menu),
         centerTitle: true,
         title: Text(
@@ -232,298 +278,369 @@ class _BookDetailsState extends State<BookDetails> {
           ),
         ],
         elevation: 0,
-      ),
-      body: StreamBuilder(
-        stream: Firestore.instance
-            .collection("Books")
-            .where("Name", isEqualTo: name)
-            .snapshots(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot snapshot,
-        ) {
-          return snapshot.hasData
-              ? Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      ), */
+      body: Column(
+        children: <Widget>[
+          SafeArea(
+            child: Padding(
+              padding:
+                  EdgeInsets.only(bottom: 20, left: 10, right: 10, top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
                     children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25),
-                                topRight: Radius.circular(25)),
-                            color: Colors.grey[100],
+                      IconButton(
+                          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Book Details',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
                           ),
-                          child: Padding(
-                            padding:
-                                EdgeInsets.only(left: 0, right: 0, top: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 20,
+                        ),
+                      )
+                    ],
+                  ),
+                  /* IconButton(
+                            icon: Icon(Icons.search, color: Colors.white),
+                            onPressed: null), */
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder(
+              stream: Firestore.instance
+                  .collection("Books")
+                  .where("Name", isEqualTo: name)
+                  .snapshots(),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot snapshot,
+              ) {
+                return snapshot.hasData
+                    ? Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(25),
+                                      topRight: Radius.circular(25)),
+                                  color: Colors.grey[100],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 0, right: 0, top: 20),
+                                  child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Hero(
-                                        tag: 'BookCover0',
-                                        child: Container(
-                                          height: 270,
-                                          width: 220,
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[300],
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image.network(
-                                              snapshot.data.documents[0]
-                                                  ['Image'],
-                                              fit: BoxFit.cover,
-                                            ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Hero(
+                                                tag: 'BookCover0',
+                                                child: Container(
+                                                  height: 300,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.grey[300],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Image.network(
+                                                      snapshot.data.documents[0]
+                                                          ['Image'],
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30),
-                                          topRight: Radius.circular(30)),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 30,
-                                        right: 30,
+                                      SizedBox(
+                                        height: 20,
                                       ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          SizedBox(
-                                            height: 30,
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30),
+                                                topRight: Radius.circular(30)),
                                           ),
-                                          Padding(
+                                          child: Padding(
                                             padding: EdgeInsets.only(
-                                                left: 0, right: 0),
+                                              left: 30,
+                                              right: 30,
+                                            ),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    SizedBox(
-                                                      width: 300,
-                                                      child: Text(
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 0, right: 0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: <Widget>[
+                                                          SizedBox(
+                                                            width: SizeConfig
+                                                                        .blockSizeHorizontal *
+                                                                    100 -
+                                                                110,
+                                                            child: Text(
+                                                              snapshot.data
+                                                                      .documents[
+                                                                  0]['Name'],
+                                                              /* .toUpperCase(), */
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[700],
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            height: 50,
+                                                            width: 50,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                              color: Color(
+                                                                  0xff6e9bdf),
+                                                            ),
+                                                            child: Center(
+                                                              child: Icon(
+                                                                Icons.bookmark,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
                                                         snapshot.data
                                                                 .documents[0]
-                                                            ['Name'],
-                                                        /* .toUpperCase(), */
+                                                            ['Author'],
                                                         style: TextStyle(
                                                           color:
-                                                              Colors.grey[700],
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                              Colors.grey[600],
+                                                          fontSize: 15,
                                                         ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      height: 50,
-                                                      width: 50,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color:
-                                                            Color(0xff6e9bdf),
-                                                      ),
-                                                      child: Center(
-                                                        child: Icon(
-                                                          Icons.bookmark,
-                                                          color: Colors.white,
+                                                      SizedBox(
+                                                        height: 40,
+                                                        width: double.infinity,
+                                                        child: ListView.builder(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount: snapshot
+                                                              .data
+                                                              .documents[0]
+                                                                  ['Category']
+                                                              .length,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      top: 10,
+                                                                      right:
+                                                                          10),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Color(
+                                                                          0x996e9bdf),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left:
+                                                                              20,
+                                                                          right:
+                                                                              20),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            Text(
+                                                                          snapshot
+                                                                              .data
+                                                                              .documents[0]['Category'][index],
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    height: 30,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
                                                       ),
-                                                    )
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                                 SizedBox(
-                                                  height: 10,
+                                                  height: 20,
                                                 ),
                                                 Text(
-                                                  snapshot.data.documents[0]
-                                                      ['Author'],
+                                                  'Desription',
                                                   style: TextStyle(
-                                                    color: Colors.grey[600],
-                                                    fontSize: 15,
+                                                    color: Color(0xff6e9bdf),
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 40,
-                                                  width: double.infinity,
-                                                  child: ListView.builder(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    itemCount: snapshot
-                                                        .data
-                                                        .documents[0]
-                                                            ['Category']
-                                                        .length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: 10,
-                                                                right: 10),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Color(
-                                                                    0x996e9bdf),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15),
-                                                              ),
-                                                              child: Padding(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left:
-                                                                            20,
-                                                                        right:
-                                                                            20),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    snapshot.data.documents[0]
-                                                                            [
-                                                                            'Category']
-                                                                        [index],
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              height: 30,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
+                                                  height: 30,
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: SingleChildScrollView(
+                                                    child: Text(
+                                                      snapshot.data.documents[0]
+                                                          ['Description'],
+                                                      style: TextStyle(
+                                                        color: Colors.grey[500],
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                            'Desription',
-                                            style: TextStyle(
-                                              color: Color(0xff6e9bdf),
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: SingleChildScrollView(
-                                              child: Text(
-                                                snapshot.data.documents[0]
-                                                    ['Description'],
-                                                style: TextStyle(
-                                                  color: Colors.grey[500],
-                                                  fontSize: 20,
+                                                SizedBox(
+                                                  height: 20,
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Expanded(flex: 0, child: Container()),
-                                          Center(
-                                              child: Container(
-                                            width: 200,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xff6e9bdf),
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                            ),
-                                            child: checkDownload(snapshot.data
-                                                        .documents[0]['Name']
-                                                        .replaceAll(" ", "_")
-                                                        .replaceAll(
-                                                            r"\'", "")) !=
-                                                    null
-                                                ? FlatButton(
-                                                    onPressed: () {
-                                                      
-                                                      setState(() {
-                                                        String path =
-                                                          checkDownload(snapshot
+                                                Expanded(
+                                                    flex: 0,
+                                                    child: Container()),
+                                                Center(
+                                                  child: downloadPath != null
+                                                      ? GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                                String path =
+                                                                    downloadPath;
+                                                                /* checkDownload(snapshot
                                                               .data
                                                               .documents[0]
                                                                   ['Name']
                                                               .replaceAll(
                                                                   " ", "_")
                                                               .replaceAll(
-                                                                  r"\'", ""));
-                                                      EpubKitty.setConfig(
-                                                          "Book",
-                                                          "#6e9bdf",
-                                                          "vertical",
-                                                          true);
-                                                      EpubKitty.open(path);
-                                                      });
-                                                    },
-                                                    child: Text(
-                                                      "Read Book",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  )
-                                                :
-                                                /* detailsProvider.downloaded
+                                                                  r"\'", "")); */
+                                                                EpubKitty.setConfig(
+                                                                    "androidBook",
+                                                                    "#6e9bdf",
+                                                                    "vertical",
+                                                                    true);
+                                                                EpubKitty.open(
+                                                                    path); 
+
+                                                                    /* pageChannel.receiveBroadcastStream().listen((Object event) {
+                                        print('page:$event');
+                                      }, onError: null); */
+
+                                                              },);
+                                                          },
+                                                          child: Container(
+                                                            width: 200,
+                                                            height: 45,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Color(
+                                                                  0xff6e9bdf),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                              'Read Book',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                    fontSize: 15,
+                                                                    fontWeight: FontWeight.bold
+                                                              ),
+                                                            ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      :
+
+                                                      /* detailsProvider.downloaded
                                   ?  FlatButton(
                                 onPressed: (){
                                   detailsProvider.getDownload(snapshot.data.documents[index1]['Name'] .replaceAll(" ", "_")
@@ -540,64 +657,84 @@ class _BookDetailsState extends State<BookDetails> {
                                   "Read Book",
                                 ),
                               ): */
-                                                Center(
-                                                    child: RaisedButton(
-                                                      elevation: 0,
-                                                      onPressed: () {
-                                                       
-                                                        setState(() {
-                                                           startDownload(
-                                                          context,
-                                                          snapshot.data
-                                                                  .documents[0]
-                                                              ['file'],
-                                                          snapshot
-                                                              .data
-                                                              .documents[0]
-                                                                  ['Name']
-                                                              .replaceAll(
-                                                                  " ", "_")
-                                                              .replaceAll(
-                                                                  r"\'", ""),
-                                                          snapshot.data
-                                                                  .documents[0]
-                                                              ['Image'],
-                                                        );
-                                                        });
-                                                      },
-                                                      color: Color(0xff6e9bdf),
-                                                      child: Text(
-                                                        'Add to Library',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
+
+                                                      GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              startDownload(
+                                                                context,
+                                                                snapshot.data
+                                                                        .documents[
+                                                                    0]['file'],
+                                                                snapshot
+                                                                    .data
+                                                                    .documents[
+                                                                        0]
+                                                                        ['Name']
+                                                                    .replaceAll(
+                                                                        " ",
+                                                                        "_")
+                                                                    .replaceAll(
+                                                                        r"\'",
+                                                                        ""),
+                                                                snapshot.data
+                                                                        .documents[
+                                                                    0]['Image'],
+                                                              );
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            width: 200,
+                                                            height: 45,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Color(
+                                                                  0xff6e9bdf),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                              'Add to Library',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                    fontSize: 15,
+                                                                    fontWeight: FontWeight.bold
+                                                              ),
+                                                            ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                          )),
-                                          SizedBox(
-                                            height: 30,
-                                          )
-                                        ],
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              : Center(
-                  child: const SpinKitChasingDots(
-                    color: Color(0xff6e9bdf),
-                    size: 100,
-                  ),
-                );
-        },
+                      )
+                    : Center(
+                        child: const SpinKitChasingDots(
+                          color: Color(0xff6e9bdf),
+                          size: 100,
+                        ),
+                      );
+              },
+            ),
+          )
+        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:prearticle/Screens/Downloads.dart';
 import 'package:prearticle/Screens/Home.dart';
+import 'package:prearticle/Screens/Website.dart';
 /* import 'package:prearticle/Screens/Website.dart'; */
 
 class NavigationHome extends StatefulWidget {
@@ -26,11 +27,12 @@ class _NavigationHomeState extends State<NavigationHome> {
   final List<Widget> _children = [
     HomePage(onPressed: () {  },),
     Downloads(),
-    //PreArticleWebsite(),
+    PreArticleWebsite(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       body: _children[currentindex],
       bottomNavigationBar: BubbleBottomBar(
         opacity: .2,
@@ -42,9 +44,9 @@ class _NavigationHomeState extends State<NavigationHome> {
         onTap: changePage,
         //inkColor: Colors.black12, //optional, uses theme color if not specified
         items: <BubbleBottomBarItem> [
-          BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.dashboard, color: Colors.black,), activeIcon: Icon(Icons.home, color: Color(0xff6e9bdf),), title: Text("Home")),
+          BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.home, color: Colors.black,), activeIcon: Icon(Icons.home, color: Color(0xff6e9bdf),), title: Text("Home")),
           BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.local_library, color: Colors.black,), activeIcon: Icon(Icons.local_library, color: Color(0xff6e9bdf),), title: Text("Library")),
-          BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.settings, color: Colors.black,), activeIcon: Icon(Icons.settings, color: Color(0xff6e9bdf),), title: Text("Settings")),
+          BubbleBottomBarItem(backgroundColor: Color(0xff6e9bdf), icon: Icon(Icons.web, color: Colors.black,), activeIcon: Icon(Icons.web, color: Color(0xff6e9bdf),), title: Text("Settings")),
         ],
       ),
     );

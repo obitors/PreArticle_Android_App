@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     onTap: () {
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (BuildContext context) => BookDetails(),
+            builder: (BuildContext context) => BookDetails(name : element['Name']),
             settings: RouteSettings(
                 arguments: element['Name'])),
       );
